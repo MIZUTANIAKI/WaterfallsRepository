@@ -29,9 +29,12 @@ public:
 		}
 		sInstance = nullptr;
 	}
+
+
+	void Run(void);
 private:
 	static sceneMng* sInstance;
-
+	bool SysInit();
 	sceneMng();
 	~sceneMng();
 };
