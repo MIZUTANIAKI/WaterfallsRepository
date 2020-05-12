@@ -1,5 +1,6 @@
 #include<DxLib.h>
 #include "sceneMng.h"
+#include "GameScene.h"
 
 sceneMng* sceneMng::sInstance = nullptr;
 
@@ -13,14 +14,14 @@ sceneMng::~sceneMng()
 
 void sceneMng::Run(void)
 {
-	if (SysInit() == true)
+	if (SysInit() != true)
 	{
 		return;
 	}
-
+	_activeScene = std::make_unique<GameScene>();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-
+		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 	}
 }
 

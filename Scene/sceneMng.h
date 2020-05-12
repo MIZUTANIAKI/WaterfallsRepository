@@ -1,4 +1,8 @@
 #pragma once
+#include <vector>
+#include <tuple>
+#include <DxLib.h>
+#include "BaseScene.h"
 
 #define lpSceneMng SceneMng::GetInstance()
 
@@ -35,6 +39,8 @@ public:
 private:
 	static sceneMng* sInstance;
 	bool SysInit();
+	unique_Base _activeScene;
+
 	sceneMng();
 	~sceneMng();
 };
