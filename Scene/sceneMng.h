@@ -6,11 +6,11 @@
 
 #define lpSceneMng SceneMng::GetInstance()
 
-class sceneMng
+class SceneMng
 {
 public:
 	
-	static sceneMng& GetInstance(void)
+	static SceneMng& GetInstance(void)
 	{
 		
 		Create();
@@ -21,7 +21,7 @@ public:
 	{
 		if (sInstance == nullptr)
 		{
-			sInstance = new sceneMng();
+			sInstance = new SceneMng();
 		}
 	}
 
@@ -34,14 +34,20 @@ public:
 		sInstance = nullptr;
 	}
 
+	void AddDrawQue(int que);
+	void AddDrawQuenex(int que);
 
 	void Run(void);
 private:
-	static sceneMng* sInstance;
+	static SceneMng* sInstance;
 	bool SysInit();
 	unique_Base _activeScene;
 
-	sceneMng();
-	~sceneMng();
+	std::vector<int> _drawList;	//描画するものを溜めておくキュー
+	std::vector<int> _drawListnex;	//描画するものを溜めておくキュー（すける）
+	void Draw(void);
+
+	SceneMng();
+	~SceneMng();
 };
 

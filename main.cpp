@@ -3,9 +3,9 @@
 
 int main()
 {
-	sceneMng::Create();
-	sceneMng::GetInstance().Run();
-	sceneMng::GetInstance().Destroy();
+	SceneMng::Create();
+	SceneMng::GetInstance().Run();
+	SceneMng::GetInstance().Destroy();
 
 	DxLib_End();
 	return 0;

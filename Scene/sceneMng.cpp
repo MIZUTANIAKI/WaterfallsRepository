@@ -2,17 +2,53 @@
 #include "sceneMng.h"
 #include "GameScene.h"
 
-sceneMng* sceneMng::sInstance = nullptr;
+SceneMng* SceneMng::sInstance = nullptr;
 
-sceneMng::sceneMng()
+
+SceneMng::SceneMng()
 {
 }
 
-sceneMng::~sceneMng()
+SceneMng::~SceneMng()
 {
 }
 
-void sceneMng::Run(void)
+void SceneMng::AddDrawQue(int que)
+{
+	//•`‰æ—p‚ÌQue‚ğ’Ç‰Á
+	_drawList.emplace_back(que);
+}
+
+void SceneMng::AddDrawQuenex(int que)
+{
+	//•`‰æ—p‚ÌQue‚ğ’Ç‰Á
+	_drawListnex.emplace_back(que);
+}
+
+void SceneMng::Draw(void)
+{
+	ClsDrawScreen();
+
+
+	//’Êí•¨‚ğ‚·‚×‚Ä•`‰æŒãAƒKƒ‰ƒX‚È‚Ç‚Ì“§‚¯‚½‚¢‚à‚Ì‚ğ•`‰æ‚·‚é‚Æ‚¢‚¢
+
+	//ˆê‚Â‚¸‚Â•`‰æ
+	for (auto dQue : _drawList)
+	{
+		MV1DrawModel(dQue);
+	}
+
+	//‚·‚¯‚é‚Ì‚ğ•`‰æ
+	for (auto dQue : _drawListnex)
+	{
+		MV1DrawModel(dQue);
+	}
+
+
+	ScreenFlip();
+}
+
+void SceneMng::Run(void)
 {
 	if (SysInit() != true)
 	{
@@ -21,11 +57,15 @@ void sceneMng::Run(void)
 	_activeScene = std::make_unique<GameScene>();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
+		_drawList.clear();
+		_drawListnex.clear();
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
+		Draw();
+
 	}
 }
 
-bool sceneMng::SysInit(void)
+bool SceneMng::SysInit(void)
 {
 	SetGraphMode(1920, 1080, 16);
 	ChangeWindowMode(true);										//‰æ–ÊwindowÓ°ÄŞ
@@ -36,6 +76,7 @@ bool sceneMng::SysInit(void)
 	SetDrawScreen(DX_SCREEN_BACK);
 	SetCreate3DSoundFlag(false);
 	SetFontSize(60);
-	
+	SetBackgroundColor(100, 255, 255);
+	SetUseZBufferFlag(TRUE);
 	return true;
 }

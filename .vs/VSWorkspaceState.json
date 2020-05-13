@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Scene"
   ],
-  "SelectedNode": "\\sceneMng.cpp",
+  "SelectedNode": "\\player.h",
   "PreviewInSolutionExplorer": false
 }
