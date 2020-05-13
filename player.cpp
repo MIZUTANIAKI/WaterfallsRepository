@@ -19,6 +19,29 @@ Player::~Player()
 void Player::Updata(void)
 {
 
+
+
+	//ƒJƒƒ‰‚Ì‘€ì
+	if (CheckHitKey(KEY_INPUT_LEFT))
+	{
+		cameraYAngle += 0.2f;
+		if (cameraYAngle <= -180.0f)
+		{
+			cameraYAngle += 360.0f;
+		}
+	}
+
+	else if (CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		cameraYAngle -= 0.2f;
+		if (cameraYAngle >= 180.0f)
+		{
+			cameraYAngle -= 360.0f;
+		}
+	}
+
+	moveVec.z += 1.0f;
+
 	CameraControl();
 
 	VECTOR TempMoveVector;

@@ -29,10 +29,7 @@ void SceneMng::Draw(void)
 {
 	ClsDrawScreen();
 
-
-	//’Êí•¨‚ğ‚·‚×‚Ä•`‰æŒãAƒKƒ‰ƒX‚È‚Ç‚Ì“§‚¯‚½‚¢‚à‚Ì‚ğ•`‰æ‚·‚é‚Æ‚¢‚¢
-
-	//ˆê‚Â‚¸‚Â•`‰æ
+		//ˆê‚Â‚¸‚Â•`‰æ
 	for (auto dQue : _drawList)
 	{
 		MV1DrawModel(dQue);
@@ -43,6 +40,8 @@ void SceneMng::Draw(void)
 	{
 		MV1DrawModel(dQue);
 	}
+	DrawSphere3D(VGet(0.0f, 0.0f, 0.0f), 100.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);	//’Êí•¨‚ğ‚·‚×‚Ä•`‰æŒãAƒKƒ‰ƒX‚È‚Ç‚Ì“§‚¯‚½‚¢‚à‚Ì‚ğ•`‰æ‚·‚é‚Æ‚¢‚¢
+
 
 
 	ScreenFlip();
