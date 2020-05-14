@@ -7,6 +7,7 @@ SceneMng* SceneMng::sInstance = nullptr;
 
 SceneMng::SceneMng()
 {
+	_fcon = NULL;
 }
 
 SceneMng::~SceneMng()
@@ -77,5 +78,6 @@ bool SceneMng::SysInit(void)
 	SetFontSize(60);
 	SetBackgroundColor(100, 255, 255);
 	SetUseZBufferFlag(TRUE);
+	SetCameraNearFar(100.0f, 100.0f);
 	return true;
 }
