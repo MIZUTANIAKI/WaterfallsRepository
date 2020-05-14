@@ -4,7 +4,6 @@
 
 Player::Player()
 {
-	_unitID=UNIT_ID::PLAYER;
 	_pos = VGet(200.0f, -100.0f, 200.0f);	//Ãﬂ⁄≤‘ç¿ïWèâä˙âª
 
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
@@ -15,6 +14,7 @@ Player::Player()
 	playerobj = MV1LoadModel("mv/p.x"); 
 	skyobj = MV1LoadModel("mv/sora.mv1");
 	kazi = NULL;
+	cameraInit();
 }
 
 Player::~Player()
@@ -184,8 +184,8 @@ void Player::MoveControl(void)
 	tempf1 = static_cast<float>(sin(2.0f / 180.0f * static_cast<double>(DX_PI_F)));
 	tempf2 = static_cast<float>(cos(2.0f / 180.0f * static_cast<double>(DX_PI_F)));
 	tempPos1.x = 0.0f;
-	tempPos1.y = tempf1 * MOVE_DISTANCE;
-	tempPos1.z = -tempf2 * MOVE_DISTANCE;
+	tempPos1.y = tempf1 * CAMERA_DISTANCE;
+	tempPos1.z = -tempf2 * CAMERA_DISTANCE;
 
 	//ëÄçÏé≤ÇÃâ°ÇÃäpìxÇãÅÇﬂÇÈ
 	tempf1 = static_cast<float>(sin(moveYAngle / 180.0f * static_cast<double>(DX_PI_F)));
@@ -212,4 +212,9 @@ void Player::MoveControl(void)
 
 
 
+}
+
+void Player::cameraInit(void)
+{
+	SetCameraNearFar(100.0f, 100.0f);
 }

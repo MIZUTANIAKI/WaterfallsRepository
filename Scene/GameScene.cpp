@@ -3,12 +3,10 @@
 #include "Player.h"
 #include "SceneMng.h"
 #include "../map.h"
-#include "../Obj.h"
 
 GameScene::GameScene()
 {
-	_objList.emplace_back(new(Player),UNIT_ID::PLAYER);
-	
+	_objList.emplace_back(new(Player));
 
 	srand((unsigned)time(NULL));								//時間を使ってランダムに数字を入れ替える
 
@@ -19,11 +17,7 @@ unique_Base GameScene::Update(unique_Base own)
 {
 	for (auto data : _objList)
 	{
-		(*data.first).Updata();	//更新処理
-		if (data.second == UNIT_ID::PLAYER)
-		{
-			
-		}
+		(*data).Updata();	//更新処理
 	}
 
 
