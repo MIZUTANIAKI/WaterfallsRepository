@@ -24,15 +24,15 @@ public:
 	void Updata(void);
 
 private:
-	void CameraControl(void);	//カメラ操作処理
+	void MoveControl(void);	//自機の移動処理
 	int kazi;
 
 
 	void cameraInit(void);
-	float  cameraYAngle;			//カメラ横の角度
-	float  cameraXAngle;			//カメラ横の角度
-	VECTOR cameraPos;			//カメラの位置
-	VECTOR cameraTarget;		//カメラの注視点
+	float  moveYAngle;			//横の角度
+	float  moveXAngle;			//横の角度
+	VECTOR movePos;			//操作軸の位置
+	VECTOR moveTarget;		//操作軸の注視点
 
 	VECTOR _pos;	//ﾌﾟﾚｲﾔ座標
 	VECTOR moveVec;	//ﾌﾟﾚｲﾔの移動量保存

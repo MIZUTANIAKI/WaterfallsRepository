@@ -34,11 +34,18 @@ public:
 		sInstance = nullptr;
 	}
 
+	int GetFcon(void) 
+	{
+		return _fcon; 
+	}
+
 	void AddDrawQue(int que);
 	void AddDrawQuenex(int que);
 
 	void Run(void);
 private:
+
+	int _fcon;
 	static SceneMng* sInstance;
 	bool SysInit();
 	unique_Base _activeScene;

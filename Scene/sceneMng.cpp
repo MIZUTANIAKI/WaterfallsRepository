@@ -60,7 +60,7 @@ void SceneMng::Run(void)
 		_drawListnex.clear();
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		Draw();
-
+		_fcon++;
 	}
 }
 
