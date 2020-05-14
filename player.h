@@ -25,6 +25,8 @@ public:
 
 private:
 	void CameraControl(void);	//ƒJƒƒ‰‘€ìˆ—
+	int kazi;
+
 
 	void cameraInit(void);
 	float  cameraYAngle;			//ƒJƒƒ‰‰¡‚ÌŠp“x

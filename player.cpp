@@ -9,6 +9,7 @@ Player::Player()
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 	playerobj = MV1LoadModel("mv/p.x"); 
 	skyobj = MV1LoadModel("mv/sora.mv1");
+	kazi = NULL;
 	cameraInit();
 }
 
@@ -24,24 +25,67 @@ void Player::Updata(void)
 	//ƒJƒƒ‰‚Ì‘€ì
 	if (CheckHitKey(KEY_INPUT_LEFT))
 	{
-		cameraYAngle += 0.2f;
+		kazi++;
+		if (kazi > 10)
+		{
+			kazi == 10;
+		}
+	}
+	else if (CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		kazi--;
+		if (kazi < -10)
+		{
+			kazi == -10;
+		}
+	}
+	//else
+	//{
+	//	if (kazi != NULL)
+	//	{
+	//		if (kazi > 0)
+	//		{
+	//			kazi-=2;
+	//			if (kazi < 0)
+	//			{
+	//				kazi = NULL;
+	//			}
+	//		}
+	//		else if (kazi < 0)
+	//		{
+	//			kazi+=2;
+	//			if (kazi > 0)
+	//			{
+	//				kazi = NULL;
+	//			}
+	//		}
+	//		else
+	//		{
+	//			kazi = NULL;
+	//		}
+	//	}
+	//}
+
+	if (kazi / 60 > 2)
+	{
+		cameraYAngle += 0.05f;
 		if (cameraYAngle <= -180.0f)
 		{
 			cameraYAngle += 360.0f;
 		}
 	}
-
-	else if (CheckHitKey(KEY_INPUT_RIGHT))
+	
+	if (kazi / 60 < -2)
 	{
-		cameraYAngle -= 0.2f;
+		cameraYAngle -= 0.05f;
 		if (cameraYAngle >= 180.0f)
 		{
 			cameraYAngle -= 360.0f;
 		}
+		
 	}
-
+	
 	moveVec.z += 1.0f;
-
 	CameraControl();
 
 	VECTOR TempMoveVector;
