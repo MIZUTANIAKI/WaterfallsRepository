@@ -14,6 +14,6 @@ public:
 	~GameScene();
 private:
 
-	std::vector<shardObj> _objList;	//アライブになっている存在を管理する。
+	std::vector<std::pair<shardObj, UNIT_ID>> _objList;	//アライブになっている存在を管理する。
 };
 

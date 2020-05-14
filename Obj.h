@@ -2,6 +2,14 @@
 #include "Dxlib.h"
 #include<memory>
 
+enum class UNIT_ID			//ÇªÇÍÇºÇÍÇÃóßèÍ
+{
+	PLAYER,
+	CPU,
+	MAX,
+};
+
+
 class Obj;
 
 using shardObj = std::shared_ptr<Obj>;
@@ -11,6 +19,19 @@ class Obj
 public:
 	Obj();
 	~Obj();
+	UNIT_ID GetUnitID(void)
+	{
+		return _unitID;
+	}
+	VECTOR GetPos(void)
+	{
+		return _pos;
+	}
 	virtual void Updata(void) = 0;
+
+	void SetUnitID(UNIT_ID unitID) { _unitID = unitID; }
+protected:
+	VECTOR _pos;
+	UNIT_ID _unitID;
 };
 
