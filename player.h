@@ -35,10 +35,16 @@ private:
 
 	float  moveYAngle;			//操作軸の横の角度
 	float  moveXAngle;			//操作軸の横の角度
-	VECTOR movePos;			//操作軸の位置
+	VECTOR movePos;				//操作軸の位置
 	
-	VECTOR _pos;	//ﾌﾟﾚｲﾔ座標
-	VECTOR moveVec;	//ﾌﾟﾚｲﾔの移動量保存
+	VECTOR _pos;				//ﾌﾟﾚｲﾔ座標
+	VECTOR moveVec;				//ﾌﾟﾚｲﾔの移動量保存
 	int    playerobj;			//ﾌﾟﾚｲﾔモデル格納用
-	int    skyobj;			//空
+	int    skyobj;				//空
+
+	bool	_flag;				//true＝帆を張るfalse＝帆をたたむ
+	bool	fKeyold;
+	int		_flagcon;
+
+	int		oneCount;
 };

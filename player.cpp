@@ -12,9 +12,16 @@ Player::Player()
 	moveYAngle = 0.0f;	//操作軸の角度初期化
 	moveXAngle = DX_PI_F;
 
-	playerobj = MV1LoadModel("mv/p.x"); 
+	playerobj = MV1LoadModel("mv/pShip.mv1"); 
 	skyobj = MV1LoadModel("mv/sora.mv1");
 	kazi = NULL;
+	_flag = true;
+
+	_flagcon = 10;
+
+	fKeyold = false;
+
+	oneCount = GetNowCount();
 }
 
 Player::~Player()
@@ -23,16 +30,49 @@ Player::~Player()
 
 void Player::Updata(void)
 {
+	if (CheckHitKey(KEY_INPUT_F))
+	{
+		if (!fKeyold)
+		{
+			if (!_flag)
+			{
+				_flag = true;
+			}
+			else
+			{
+				_flag = false;
+				_flagcon = 10;
+			}
+		}
+	}
+	
+	if (!_flag)
+	{	
+		// １秒たっているか
+		if (GetNowCount() - oneCount > 1000)
+		{
+
+			_flagcon--;
+			
+			oneCount = GetNowCount();
+		}
+
+		
+	}
+
 	MoveControl();
 
-	MV1SetPosition(playerobj, VGet(0.0f, -100.0f, 0.0f));	//ﾌﾟﾚｲﾔ座標変更
+	MV1SetPosition(playerobj, VGet(0.0f, 0.0f, 0.0f));	//ﾌﾟﾚｲﾔ座標変更
 
+	MV1SetRotationXYZ(playerobj, VGet(0.0f, -moveYAngle / 180.0f * DX_PI_F, 0.0f));	//ﾌﾟﾚｲﾔの向きを変更
 
 	MV1SetPosition(playerobj, _pos);	//ﾌﾟﾚｲﾔ座標変更
 	MV1SetPosition(skyobj, _pos);	//ﾌﾟﾚｲﾔ座標変更
 
 	lpSceneMng.AddDrawQue(playerobj);	//ﾌﾟﾚｲﾔ描画要求
 	lpSceneMng.AddDrawQue(skyobj);	//描画要求
+
+	fKeyold = CheckHitKey(KEY_INPUT_F);
 }
 
 void Player::MoveControl(void)
@@ -62,77 +102,69 @@ void Player::MoveControl(void)
 			}
 		}
 	}
-	//else
-	//{
-	//	if (kazi != NULL)
-	//	{
-	//		if (kazi > 0)
-	//		{
-	//			kazi-=2;
-	//			if (kazi < 0)
-	//			{
-	//				kazi = NULL;
-	//			}
-	//		}
-	//		else if (kazi < 0)
-	//		{
-	//			kazi+=2;
-	//			if (kazi > 0)
-	//			{
-	//				kazi = NULL;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			kazi = NULL;
-	//		}
-	//	}
-	//}
+	else
+	{
+		if (kazi != NULL)
+		{
+			if (kazi > 0)
+			{
+				kazi-=2;
+				if (kazi < 0)
+				{
+					kazi = NULL;
+				}
+			}
+			else if (kazi < 0)
+			{
+				kazi+=2;
+				if (kazi > 0)
+				{
+					kazi = NULL;
+				}
+			}
+			else
+			{
+				kazi = NULL;
+			}
+		}
+	}
 
 	if (kazi > 2)
 	{
-		if (kazi < 4)
+		if (kazi > 6)
 		{
-			moveYAngle += 0.05f;
+			moveYAngle += 0.06f;
 			if (moveYAngle >= 180.0f)
 			{
-				moveYAngle = -360.0f;
+				moveYAngle -= 360.0f;
 			}
 		}
 		else if (kazi < 6)
 		{
-			moveYAngle += 0.055f;
+			moveYAngle += 0.08f;
 			if (moveYAngle >= 180.0f)
 			{
-				moveYAngle = -360.0f;
-			}
-		}
-		else if (kazi < 8)
-		{
-			moveYAngle += 0.551f;
-			if (moveYAngle >= 180.0f)
-			{
-				moveYAngle = -360.0f;
+				moveYAngle -= 360.0f;
 			}
 		}
 		else if (kazi <= 10)
 		{
-			moveYAngle += 0.5512f;
+			moveYAngle += 0.1f;
 			if (moveYAngle >= 180.0f)
 			{
-				moveYAngle = -360.0f;
+				moveYAngle -= 360.0f;
 			}
 		}
 	}
 
 	if (kazi < -2)
 	{
-		if (kazi > -4)
+		if (kazi < -6)
 		{
-			moveYAngle -= 0.05f;
+			moveYAngle -= 0.06f;
 			if (moveYAngle <= -180.0f)
 			{
-				moveYAngle = 360.0f;
+				moveYAngle += 360.0f;
 			}
 		}
 		else if (kazi > -6)
@@ -140,29 +172,42 @@ void Player::MoveControl(void)
 			moveYAngle -= 0.08f;
 			if (moveYAngle <= -180.0f)
 			{
-				moveYAngle = 360.0f;
-			}
-		}
-		else if (kazi > -8)
-		{
-			moveYAngle -= 1.0f;
-			if (moveYAngle <= -180.0f)
-			{
-				moveYAngle = 360.0f;
+				moveYAngle += 360.0f;
 			}
 		}
 		else if (kazi >= -10)
 		{
-			moveYAngle -= 1.5f;
+			moveYAngle -= 0.1f;
 			if (moveYAngle <= -180.0f)
 			{
-				moveYAngle = 360.0f;
+				moveYAngle += 360.0f;
 			}
 		}
 	}
 
-	moveVec.z += 1.0f;
-
+	if (_flag)
+	{
+		moveVec.z += 5.0f;
+	}
+	else
+	{
+		if (_flagcon >= 8)
+		{
+			moveVec.z += 4.0f;
+		}
+		else if (_flagcon >= 6)
+		{
+			moveVec.z += 3.0f;
+		}
+		else if (_flagcon >= 4)
+		{
+			moveVec.z += 2.0f;
+		}
+		else
+		{
+			moveVec.z += 1.0f;
+		}
+	}
 
 	VECTOR tempPos1;
 	VECTOR tempPos2;
@@ -204,7 +249,5 @@ void Player::MoveControl(void)
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
 	_pos = VAdd(_pos, TempMoveVector);
-
-
 
 }

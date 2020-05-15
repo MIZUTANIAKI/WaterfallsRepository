@@ -47,9 +47,9 @@ void Camera::CameraRun(VECTOR targetPos)
 		{
 			cameraDistance = 400;
 		}
-		if (cameraDistance > CAMERA_DISTANCE)
+		if (cameraDistance > CAMERA_DISTANCE*2)
 		{
-			cameraDistance = CAMERA_DISTANCE;
+			cameraDistance = CAMERA_DISTANCE*2;
 		}
 
 		// ホイールオフ
@@ -98,9 +98,9 @@ void Camera::CameraRun(VECTOR targetPos)
 
 		}
 
-		if (cameraXAngle < -15.0f)
+		if (cameraXAngle < -10.0f)
 		{
-			cameraXAngle = -15.0f;
+			cameraXAngle = -10.0f;
 		}
 		if (cameraXAngle > 20.0f)
 		{
