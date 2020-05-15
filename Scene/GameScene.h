@@ -3,6 +3,7 @@
 #include <vector>
 #include "obj.h"
 #include<memory>
+#include "../camera.h"
 
 
 class GameScene :
@@ -13,7 +14,7 @@ public:
 	GameScene();
 	~GameScene();
 private:
-
+	Camera cam;
 	std::vector<std::pair<shardObj, UNIT_ID>> _objList;	//アライブになっている存在を管理する。
 };
 

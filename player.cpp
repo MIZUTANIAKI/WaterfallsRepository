@@ -23,10 +23,6 @@ Player::~Player()
 
 void Player::Updata(void)
 {
-
-
-
-	
 	MoveControl();
 
 	MV1SetPosition(playerobj, VGet(0.0f, -100.0f, 0.0f));	//ﾌﾟﾚｲﾔ座標変更
@@ -35,7 +31,6 @@ void Player::Updata(void)
 	MV1SetPosition(playerobj, _pos);	//ﾌﾟﾚｲﾔ座標変更
 	MV1SetPosition(skyobj, _pos);	//ﾌﾟﾚｲﾔ座標変更
 
-
 	lpSceneMng.AddDrawQue(playerobj);	//ﾌﾟﾚｲﾔ描画要求
 	lpSceneMng.AddDrawQue(skyobj);	//描画要求
 }
@@ -43,7 +38,7 @@ void Player::Updata(void)
 void Player::MoveControl(void)
 {
 
-	//カメラの操作
+	//操作
 	if (CheckHitKey(KEY_INPUT_LEFT))
 	{
 		if (lpSceneMng.GetFcon() % 30 == 0)

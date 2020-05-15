@@ -22,7 +22,7 @@ unique_Base GameScene::Update(unique_Base own)
 		(*data.first).Updata();	//XVˆ—
 		if (data.second == UNIT_ID::PLAYER)
 		{
-			
+			cam.CameraRun((*data.first).GetPos());
 		}
 	}
 

@@ -19,11 +19,11 @@ class Obj
 public:
 	Obj();
 	~Obj();
-	UNIT_ID GetUnitID(void)
+	virtual UNIT_ID GetUnitID(void)
 	{
 		return _unitID;
 	}
-	VECTOR GetPos(void)
+	virtual VECTOR GetPos(void)
 	{
 		return _pos;
 	}

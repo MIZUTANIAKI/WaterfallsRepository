@@ -16,6 +16,17 @@ class Player :
 public:
 	Player();
 	~Player();
+
+	UNIT_ID GetUnitID(void) override
+	{
+		return _unitID;
+	};
+
+	VECTOR GetPos(void) override
+	{
+		return _pos;
+	};
+
 	void Updata(void);
 
 private:
