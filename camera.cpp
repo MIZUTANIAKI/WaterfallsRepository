@@ -98,9 +98,9 @@ void Camera::CameraRun(VECTOR targetPos)
 
 		}
 
-		if (cameraXAngle < -10.0f)
+		if (cameraXAngle < -5.0f)
 		{
-			cameraXAngle = -10.0f;
+			cameraXAngle = -5.0f;
 		}
 		if (cameraXAngle > 20.0f)
 		{
