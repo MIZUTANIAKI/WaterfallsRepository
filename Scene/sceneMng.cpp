@@ -5,7 +5,7 @@
 SceneMng* SceneMng::sInstance = nullptr;
 
 
-SceneMng::SceneMng()
+SceneMng::SceneMng() :ScreenSize{1920,1080}
 {
 	_fcon = NULL;
 }
@@ -67,7 +67,7 @@ void SceneMng::Run(void)
 
 bool SceneMng::SysInit(void)
 {
-	SetGraphMode(1920, 1080, 16);
+	SetGraphMode(ScreenSize.x, ScreenSize.y, 16);
 	ChangeWindowMode(true);										//画面windowﾓｰﾄﾞ
 	if (DxLib_Init() == -1)										//DXﾗｲﾌﾞﾗﾘの初期化処理
 	{
@@ -79,5 +79,6 @@ bool SceneMng::SysInit(void)
 	SetBackgroundColor(100, 255, 255);
 	SetUseZBufferFlag(TRUE);
 	SetCameraNearFar(100.0f, 100.0f);
+	SetMouseDispFlag(false);	//マウスを非表示に
 	return true;
 }

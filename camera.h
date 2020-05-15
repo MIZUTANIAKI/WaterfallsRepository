@@ -1,4 +1,5 @@
 #pragma once
+#include "vector2.h"
 
 // カメラの回転速度
 #define LOOK_ANGLE_SPEED		0.5f
@@ -19,8 +20,11 @@ public:
 private:
 	void CameraInit(void);
 
-	VECTOR _Pos;
-	float  cameraYAngle;			//カメラ横の角度
-	float  cameraXAngle;			//カメラ縦の角度
-};
+	VECTOR	_Pos;
+	float	cameraYAngle;			//カメラ横の角度
+	float	cameraXAngle;			//カメラ縦の角度
+	float	cameraDistance;			//カメラ距離
 
+
+	Vector2 mouse;
+};

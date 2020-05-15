@@ -3,6 +3,7 @@
 #include <tuple>
 #include <DxLib.h>
 #include "BaseScene.h"
+#include "../vector2.h"
 
 #define lpSceneMng SceneMng::GetInstance()
 
@@ -43,6 +44,8 @@ public:
 	void AddDrawQuenex(int que);
 
 	void Run(void);
+
+	const Vector2 ScreenSize;
 private:
 
 	int _fcon;
