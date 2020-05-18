@@ -1,5 +1,6 @@
 #pragma once
 #include "obj.h"
+#include "Bullet.h"
 
 // ˆÚ“®‘¬“x
 #define MOVESPEED					10.0f
@@ -47,4 +48,6 @@ private:
 	int		_flagcon;
 
 	int		oneCount;
+
+	Bullet pbullet1;
 };

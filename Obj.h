@@ -27,10 +27,17 @@ public:
 	{
 		return _pos;
 	}
+
+	virtual int GetModel(void)
+	{
+		return _model;
+	}
+
 	virtual void Updata(void) = 0;
 
 	void SetUnitID(UNIT_ID unitID) { _unitID = unitID; }
 protected:
+	int _model;
 	VECTOR _pos;
 	UNIT_ID _unitID;
 };

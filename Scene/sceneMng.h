@@ -7,6 +7,8 @@
 
 #define lpSceneMng SceneMng::GetInstance()
 
+using 	BulletQueT = std::tuple<VECTOR, int>;
+
 class SceneMng
 {
 public:
@@ -46,6 +48,10 @@ public:
 	void Run(void);
 
 	const Vector2 ScreenSize;
+
+	void AddBulletQue(BulletQueT bque);
+
+	std::vector < BulletQueT> GetBulletList(void);
 private:
 
 	int _fcon;
@@ -55,8 +61,8 @@ private:
 
 	std::vector<int> _drawList;	//描画するものを溜めておくキュー
 	std::vector<int> _drawListnex;	//描画するものを溜めておくキュー（すける）
+	std::vector<BulletQueT> _BulletList;	//弾丸キュー
 	void Draw(void);
-
 	SceneMng();
 	~SceneMng();
 };

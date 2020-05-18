@@ -26,10 +26,21 @@ void SceneMng::AddDrawQuenex(int que)
 	_drawListnex.emplace_back(que);
 }
 
+void SceneMng::AddBulletQue(BulletQueT bque)
+{
+	_BulletList.emplace_back(bque);
+}
+
+std::vector<BulletQueT> SceneMng::GetBulletList(void)
+{
+	return _BulletList;
+}
+
 void SceneMng::Draw(void)
 {
 	ClsDrawScreen();
 
+	//’Êí•¨‚ğ‚·‚×‚Ä•`‰æŒãAƒKƒ‰ƒX‚È‚Ç‚Ì“§‚¯‚½‚¢‚à‚Ì‚ğ•`‰æ‚·‚é‚Æ‚¢‚¢‚æ‚¤‚¾
 		//ˆê‚Â‚¸‚Â•`‰æ
 	for (auto dQue : _drawList)
 	{
@@ -41,7 +52,7 @@ void SceneMng::Draw(void)
 	{
 		MV1DrawModel(dQue);
 	}
-	DrawSphere3D(VGet(0.0f, 0.0f, 0.0f), 100.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);	//’Êí•¨‚ğ‚·‚×‚Ä•`‰æŒãAƒKƒ‰ƒX‚È‚Ç‚Ì“§‚¯‚½‚¢‚à‚Ì‚ğ•`‰æ‚·‚é‚Æ‚¢‚¢
+	DrawSphere3D(VGet(0.0f, 0.0f, 0.0f), 100.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);	
 
 
 
@@ -57,6 +68,7 @@ void SceneMng::Run(void)
 	_activeScene = std::make_unique<GameScene>();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
+		_BulletList.clear();
 		_drawList.clear();
 		_drawListnex.clear();
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
@@ -64,6 +76,7 @@ void SceneMng::Run(void)
 		_fcon++;
 	}
 }
+
 
 bool SceneMng::SysInit(void)
 {
@@ -80,5 +93,10 @@ bool SceneMng::SysInit(void)
 	SetUseZBufferFlag(TRUE);
 	SetCameraNearFar(100.0f, 100.0f);
 	SetMouseDispFlag(false);	//ƒ}ƒEƒX‚ğ”ñ•\¦‚É
+	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+	SetLightAmbColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+
+	ChangeLightTypeDir(VGet(0.0f, -1.0f, 0.0f));
+
 	return true;
 }

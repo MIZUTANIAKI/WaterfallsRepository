@@ -4,11 +4,11 @@
 #include "SceneMng.h"
 #include "../map.h"
 #include "../Obj.h"
+#include "../Bullet.h"
 
 GameScene::GameScene()
 {
 	_objList.emplace_back(new(Player),UNIT_ID::PLAYER);
-	
 
 	srand((unsigned)time(NULL));								//ŠÔ‚ğg‚Á‚Äƒ‰ƒ“ƒ_ƒ€‚É”š‚ğ“ü‚ê‘Ö‚¦‚é
 
@@ -25,7 +25,6 @@ unique_Base GameScene::Update(unique_Base own)
 			cam.CameraRun((*data.first).GetPos());
 		}
 	}
-
 
 	lpMapMng.Update();
 	return std::move(own);
