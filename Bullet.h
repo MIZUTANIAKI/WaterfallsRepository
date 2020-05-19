@@ -15,10 +15,11 @@ public:
 
 	void SetBullet(VECTOR pos,VECTOR vec);
 private:
-	VECTOR _pos;
-	VECTOR _direction;	
-	bool _Shotflag;
+	VECTOR	_pos[2];
+	VECTOR	_direction[2];	
+	bool	_Shotflag;
 
-	int  bulletobj;			//
+	int		bulletobj;			//
+	int		bulletmodel[2];
 };
 
