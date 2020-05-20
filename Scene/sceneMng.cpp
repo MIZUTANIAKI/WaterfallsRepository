@@ -54,8 +54,6 @@ void SceneMng::Draw(void)
 	}
 	DrawSphere3D(VGet(0.0f, 0.0f, 0.0f), 100.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);	
 
-
-
 	ScreenFlip();
 }
 
@@ -96,7 +94,7 @@ bool SceneMng::SysInit(void)
 	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 	SetLightAmbColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
-	ChangeLightTypeDir(VGet(0.0f, -1.0f, 0.0f));
+	//ChangeLightTypeDir(VGet(0.0f, 1.0f, 0.0f));
 
 	return true;
 }

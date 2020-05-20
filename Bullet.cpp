@@ -1,15 +1,23 @@
-#include <iostream>
+﻿#include <iostream>
 #include <DxLib.h>
 #include "Scene/sceneMng.h"
 #include "Bullet.h"
 
+//斜め下に打つのではなく、楕円描きながら落としたい
+//水平に、等速直線運動して、下向きに自由落下している状態らしい
+//等速は、速度が、一定のまま進んでいく。
+//自由落下、重力加速度は9.8[m/s²]で固定。
+//つまり初速*時間+(重力加速度*時間)/2？
 
 Bullet::Bullet()
 {
-	_Shotflag = false;
 	bulletobj = MV1LoadModel("mv/bullet.mv1");
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < BULLETMAX; i++)
 	{
+		_Shotflag[i] = false;
+		_bulletCon[i] = 0;
+		_pos[i] = VGet(0.0f, 0.0f, 0.0f);
+		_direction[i] = VGet(0.0f, 0.0f, 0.0f);
 		bulletmodel[i] = MV1DuplicateModel(bulletobj);
 	}
 }
@@ -20,26 +28,37 @@ Bullet::~Bullet()
 
 void Bullet::Run(void)
 {
-	if (_Shotflag == true)
+	for (int i = 0; i < BULLETMAX; i++)
 	{
-		for (int i = 0; i < 2; i++)
+		if (_Shotflag[i] == true)
 		{
 			VECTOR tmpvec, tmpmove;
-			tmpmove.x = _direction[i].x * 100;
-			tmpmove.z = _direction[i].z * 100;
+			tmpmove.x = _direction[i].x;
+			tmpmove.z = _direction[i].z;
 			tmpmove.y = 0.0f;
 			tmpvec = VAdd(_pos[i], tmpmove);
-			//tmpvec = VAdd(_pos[i], VGet(0.0f, S_GRAVITY, 0.0f));
-		
-			//���菈���@
 
+			//初速*時間+(重力加速度*時間)/2
+			tmpvec.y += -1*(100 * _bulletCon[i]/60 + (S_GRAVITY * _bulletCon[i]/60)*2 / 2);
+
+			//判定処理　
+			if (tmpvec.y < 0)
+			{
+				_Shotflag[i] = false;
+			}
 
 			_pos[i] = tmpvec;
+
+			_bulletCon[i]++;
 		}
-		for (int i = 0; i < 2; i++)
+	}
+
+	for (int i = 0; i < BULLETMAX; i++)
+	{
+		if (_Shotflag[i] == true)
 		{
 			MV1SetPosition(bulletmodel[i], _pos[i]);
-			lpSceneMng.AddDrawQue(bulletmodel[i]);	//�`��v��
+			lpSceneMng.AddDrawQue(bulletmodel[i]);	//描画要求
 		}
 	}
 
@@ -47,17 +66,30 @@ void Bullet::Run(void)
 
 void Bullet::SetBullet(VECTOR pos, VECTOR vec)
 {
-	MATRIX tmpmat;
+	for (int i = 0; i < BULLETMAX; i++)
+	{
+		//if (_Shotflag[i] == false)
+		{
+			MATRIX tmpmat;
+			if (BULLETMAX / 2 < i)
+			{
+				tmpmat = MGetRotY(static_cast<float>((DX_PI / 180) * -90));
+			}
+			else
+			{
+				tmpmat = MGetRotY(static_cast<float>((DX_PI / 180) * 90));
+			}
+			
+			_pos[i] = pos;
+			_pos[i].y = 800;
+			_direction[i] = VNorm(VTransform(vec, tmpmat));
+			_direction[i].x *= 100;
+			_direction[i].z *= 100;
 
-	tmpmat = MGetRotY((DX_PI / 180) * -90);
+			_bulletCon[i] = 0;
 
-	_pos[0] = pos;
-	_direction[0] = VTransform(vec, tmpmat);
-
-	tmpmat = MGetRotY((DX_PI / 180) * 90);
-	_pos[1] = pos;
-	_direction[1] = VTransform(vec,tmpmat);
-
-	_Shotflag = true;
+			_Shotflag[i] = true;
+		}
+	}
 }
 

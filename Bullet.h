@@ -3,7 +3,9 @@
 #include <vector>
 #include "obj.h"
 
-#define S_GRAVITY -1.0f
+#define S_GRAVITY -9.8/60 //èdóÕâ¡ë¨ìx
+
+#define BULLETMAX 2
 
 class Bullet
 {
@@ -15,11 +17,12 @@ public:
 
 	void SetBullet(VECTOR pos,VECTOR vec);
 private:
-	VECTOR	_pos[2];
-	VECTOR	_direction[2];	
-	bool	_Shotflag;
+	VECTOR	_pos[BULLETMAX];
+	VECTOR	_direction[BULLETMAX];
+	bool	_Shotflag[BULLETMAX];
 
 	int		bulletobj;			//
-	int		bulletmodel[2];
+	int		bulletmodel[BULLETMAX];
+	int		_bulletCon[BULLETMAX];
 };
 
