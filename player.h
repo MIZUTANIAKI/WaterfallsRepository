@@ -28,7 +28,7 @@ public:
 		return _pos;
 	};
 
-	void Updata(void);
+	void Updata(void) override;
 
 private:
 	void MoveControl(void);	//©‹@‚ÌˆÚ“®ˆ—
