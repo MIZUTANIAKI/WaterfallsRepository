@@ -18,7 +18,6 @@ Enemy::Enemy()
 
 	enemyobj = MV1LoadModel("mv/eShip.mv1");
 
-	kazi = NULL;
 	_flag = true;
 
 	_flagcon = 10;

@@ -54,7 +54,6 @@ private:
 	VECTOR _direction;
 
 	void	MoveControl(void);	//©‹@‚ÌˆÚ“®ˆ—
-	int		kazi;
 
 	float	moveYAngle;			//‘€ì²‚Ì‰¡‚ÌŠp“x
 	float	moveXAngle;			//‘€ì²‚Ì‰¡‚ÌŠp“x

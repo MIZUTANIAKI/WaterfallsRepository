@@ -8,7 +8,7 @@
 #define CAMERA_HEIGHT		1000.0f
 
 // ƒJƒƒ‰‚ÆÌßÚ²Ô–{‘Ì‚Æ‚Ì‚Ì‹——£
-#define CAMERA_DISTANCE		1200.0f
+#define CAMERA_DISTANCE		1500.0f
 
 class Camera
 {

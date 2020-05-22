@@ -18,7 +18,7 @@ void Camera::CameraInit(void)
 {
 	// ƒJƒƒ‰‚ÌÀ•W‚ğ‰Šú‰»
 	_Pos.x = 0.0f;
-	_Pos.y = 500.0f;
+	_Pos.y = 1000.0f;
 	_Pos.z = 800.0f;
 	cameraYAngle = 0.0f;
 	cameraXAngle = 2.0f;
