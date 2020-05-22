@@ -30,6 +30,11 @@ public:
 
 	virtual void Updata(void) = 0;
 
+	virtual void Updata(VECTOR pos)
+	{
+		return;
+	}
+
 	void SetUnitID(UNIT_ID unitID) { _unitID = unitID; }
 protected:
 	VECTOR _pos;

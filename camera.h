@@ -5,7 +5,7 @@
 #define LOOK_ANGLE_SPEED		0.5f
 
 // ƒJƒƒ‰‚Ì‚‚³
-#define CAMERA_HEIGHT		500.0f
+#define CAMERA_HEIGHT		1000.0f
 
 // ƒJƒƒ‰‚ÆÌßÚ²Ô–{‘Ì‚Æ‚Ì‚Ì‹——£
 #define CAMERA_DISTANCE		1200.0f

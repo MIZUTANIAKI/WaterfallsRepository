@@ -7,7 +7,7 @@
 Player::Player()
 {
 	_unitID=UNIT_ID::PLAYER;
-	_pos = VGet(200.0f, 0.0f, 200.0f);	//ﾌﾟﾚｲﾔ座標初期化
+	_pos = VGet(0.0f, 0.0f, 0.0f);	//ﾌﾟﾚｲﾔ座標初期化
 
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 	movePos = VGet(0.0f, 5000.0f, 0.0f);	//操作軸の座標初期化
@@ -16,6 +16,7 @@ Player::Player()
 
 	playerobj = MV1LoadModel("mv/pShip.mv1"); 
 	skyobj = MV1LoadModel("mv/sora.mv1");
+	MV1SetScale(skyobj, VGet(1.0f, 1.0f, 1.0f));
 	kazi = NULL;
 	_flag = true;
 
@@ -65,7 +66,7 @@ void Player::Updata(void)
 
 	MoveControl();
 
-	pbullet1.Run();
+	pbullet.Run();
 
 	MV1SetPosition(playerobj, VGet(0.0f, 0.0f, 0.0f));	//ﾌﾟﾚｲﾔ座標変更
 
@@ -154,7 +155,7 @@ void Player::MoveControl(void)
 		}
 		else if (kazi <= 10)
 		{
-			moveYAngle += 0.1f;
+			moveYAngle += 0.12f;
 			if (moveYAngle >= 180.0f)
 			{
 				moveYAngle -= 360.0f;
@@ -182,7 +183,7 @@ void Player::MoveControl(void)
 		}
 		else if (kazi >= -10)
 		{
-			moveYAngle -= 0.1f;
+			moveYAngle -= 0.12f;
 			if (moveYAngle <= -180.0f)
 			{
 				moveYAngle += 360.0f;
@@ -262,6 +263,6 @@ void Player::MoveControl(void)
 		tmpvec1.y = 0.0f;
 		tmpvec2.y = 0.0f;
 
-		pbullet1.SetBullet(VAdd(_pos,VGet(0.0f,100.0f,0.0f)), VNorm(VSub(tmpvec1, tmpvec2)));
+		pbullet.SetBullet(VAdd(_pos,VGet(0.0f,100.0f,0.0f)), VNorm(VSub(tmpvec1, tmpvec2)));
 	}
 }

@@ -42,6 +42,8 @@ public:
 		return _fcon; 
 	}
 
+
+
 	void AddDrawQue(int que);
 	void AddDrawQuenex(int que);
 
@@ -59,11 +61,14 @@ private:
 	bool SysInit();
 	unique_Base _activeScene;
 
+	int LightHandle;
+
 	std::vector<int> _drawList;	//描画するものを溜めておくキュー
 	std::vector<int> _drawListnex;	//描画するものを溜めておくキュー（すける）
 	std::vector<BulletQueT> _BulletList;	//弾丸キュー
 	void Draw(void);
 	SceneMng();
 	~SceneMng();
+
 };
 

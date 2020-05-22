@@ -39,7 +39,7 @@ void Bullet::Run(void)
 			tmpvec = VAdd(_pos[i], tmpmove);
 
 			//初速*時間+(重力加速度*時間)/2
-			tmpvec.y += -1*(100 * _bulletCon[i]/60 + (S_GRAVITY * _bulletCon[i]/60)*2 / 2);
+			tmpvec.y += -1*(100 * _bulletCon[i]/60 + static_cast<float>(S_GRAVITY * _bulletCon[i]/60)*2 / 2);
 
 			//判定処理　
 			if (tmpvec.y < 0)
@@ -68,7 +68,7 @@ void Bullet::SetBullet(VECTOR pos, VECTOR vec)
 {
 	for (int i = 0; i < BULLETMAX; i++)
 	{
-		//if (_Shotflag[i] == false)
+		if (_Shotflag[i] == false)
 		{
 			MATRIX tmpmat;
 			if (BULLETMAX / 2 < i)

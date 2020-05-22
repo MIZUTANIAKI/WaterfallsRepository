@@ -52,6 +52,7 @@ void SceneMng::Draw(void)
 	{
 		MV1DrawModel(dQue);
 	}
+
 	DrawSphere3D(VGet(0.0f, 0.0f, 0.0f), 100.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);	
 
 	ScreenFlip();
@@ -64,6 +65,7 @@ void SceneMng::Run(void)
 		return;
 	}
 	_activeScene = std::make_unique<GameScene>();
+
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
 		_BulletList.clear();
@@ -72,9 +74,10 @@ void SceneMng::Run(void)
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		Draw();
 		_fcon++;
+
+
 	}
 }
-
 
 bool SceneMng::SysInit(void)
 {
@@ -88,13 +91,14 @@ bool SceneMng::SysInit(void)
 	SetCreate3DSoundFlag(false);
 	SetFontSize(60);
 	SetBackgroundColor(100, 255, 255);
-	SetUseZBufferFlag(TRUE);
-	SetCameraNearFar(100.0f, 100.0f);
+	SetUseZBufferFlag(TRUE); 
+	SetCameraNearFar(100.0f, 15000.0f);
 	SetMouseDispFlag(false);	//マウスを非表示に
 	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 	SetLightAmbColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
-	//ChangeLightTypeDir(VGet(0.0f, 1.0f, 0.0f));
+	ChangeLightTypeDir(VGet(0.0f, 1.0f, 0.0f));
+	LightHandle = CreateDirLightHandle(VGet(0.0f, -1.0f, 0.0f));
 
 	return true;
 }

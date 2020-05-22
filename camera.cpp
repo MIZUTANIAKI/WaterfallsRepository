@@ -41,15 +41,15 @@ void Camera::CameraRun(VECTOR targetPos)
 	}
 	else
 	{	
-		cameraDistance -= static_cast<float>(GetMouseWheelRotVol()*20);
+		cameraDistance -= static_cast<float>(GetMouseWheelRotVol()*50);
 
 		if (cameraDistance < 400)
 		{
 			cameraDistance = 400;
 		}
-		if (cameraDistance > CAMERA_DISTANCE*2)
+		if (cameraDistance > CAMERA_DISTANCE*3)
 		{
-			cameraDistance = CAMERA_DISTANCE*2;
+			cameraDistance = CAMERA_DISTANCE*3;
 		}
 
 		// ホイールオフ
@@ -119,7 +119,7 @@ void Camera::CameraRun(VECTOR targetPos)
 	VECTOR tempCameraPos= VGet(0.0f, 0.0f, 0.0f);
 	float pSin=NULL, pCos=NULL;
 
-	tempCameraPos = targetPos;	//カメラの位置をﾌﾟﾚｲﾔ座標で初期化
+	tempCameraPos = VAdd(targetPos,VGet(0.0f,100.0f,0.0f));	//カメラの位置をﾌﾟﾚｲﾔ座標で初期化
 	tempCameraPos.y += CAMERA_HEIGHT;	//初期化した位置にカメラの高さを加算
 
 	//カメラの高さの角度を求める

@@ -18,6 +18,8 @@ private:
 	Camera cam;
 	std::vector<std::pair<shardObj, UNIT_ID>> _objList;	//アライブになっている存在を管理する。
 
+	VECTOR ppos;
+
 	int p;
 };
 

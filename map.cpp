@@ -15,6 +15,9 @@ Map::Map()
 	MV1SetPosition(mapmodel, VGet(0.0f, 0.0f, 0.0f));	//À•W•ÏX
 
 	MV1SetOpacityRate(mapmodel, 0.5f);
+
+
+	MV1SetScale(mapmodel, VGet(2.5f, 1.1f, 2.5f));
 }
 
 Map::~Map()

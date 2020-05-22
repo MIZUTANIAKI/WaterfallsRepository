@@ -49,5 +49,5 @@ private:
 
 	int		oneCount;
 
-	Bullet pbullet1;
+	Bullet pbullet;
 };
