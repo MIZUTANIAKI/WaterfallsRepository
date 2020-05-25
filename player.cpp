@@ -266,3 +266,4 @@ void Player::MoveControl(void)
 		pbullet.SetBullet(VAdd(_pos,VGet(0.0f,100.0f,0.0f)), VNorm(VSub(tmpvec1, tmpvec2)));
 	}
 }
+

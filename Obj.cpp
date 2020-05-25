@@ -1,7 +1,5 @@
 #include "obj.h"
 
-
-
 Obj::Obj()
 {
 	_unitID = UNIT_ID::CPU;

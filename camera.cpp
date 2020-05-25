@@ -27,6 +27,7 @@ void Camera::CameraInit(void)
 	cameraDistance = CAMERA_DISTANCE;
 }
 
+
 void Camera::CameraRun(VECTOR targetPos)
 {
 

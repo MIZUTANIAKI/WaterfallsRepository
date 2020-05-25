@@ -74,8 +74,6 @@ void SceneMng::Run(void)
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		Draw();
 		_fcon++;
-
-
 	}
 }
 

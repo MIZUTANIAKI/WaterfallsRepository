@@ -54,7 +54,14 @@ public:
 	void AddBulletQue(BulletQueT bque);
 
 	std::vector < BulletQueT> GetBulletList(void);
+
+
+
 private:
+
+
+
+
 
 	int _fcon;
 	static SceneMng* sInstance;
