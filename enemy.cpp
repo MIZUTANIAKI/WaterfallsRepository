@@ -16,8 +16,6 @@ Enemy::Enemy()
 	moveYAngle = 0.0f;	//‘€ì²‚ÌŠp“x‰Šú‰»
 	moveXAngle = DX_PI_F;
 
-	enemyobj = MV1LoadModel("mv/eShip.mv1");
-
 	_flag = true;
 
 	_flagcon = 10;

@@ -6,6 +6,7 @@ enum class UNIT_ID			//ÇªÇÍÇºÇÍÇÃóßèÍ
 {
 	PLAYER,
 	CPU,
+	BULLET,
 	MAX,
 };
 

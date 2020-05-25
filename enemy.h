@@ -61,7 +61,6 @@ private:
 
 	VECTOR	_pos;				//À•W
 	VECTOR	moveVec;			//ˆÚ“®—Ê•Û‘¶
-	int		enemyobj;			//“Gƒ‚ƒfƒ‹Ši”[—p
 
 	bool	_flag;				//true”¿‚ğ’£‚éfalse”¿‚ğ‚½‚½‚Ş
 	bool	fKeyold;

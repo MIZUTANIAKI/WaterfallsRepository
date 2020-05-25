@@ -21,8 +21,6 @@ private:
 	VECTOR	_direction[BULLETMAX];
 	bool	_Shotflag[BULLETMAX];
 
-	int		bulletobj;			//
-	int		bulletmodel[BULLETMAX];
 	int		_bulletCon[BULLETMAX];
 };
 

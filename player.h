@@ -40,8 +40,6 @@ private:
 	
 	VECTOR _pos;				//ÌßÚ²ÔÀ•W
 	VECTOR moveVec;				//ÌßÚ²Ô‚ÌˆÚ“®—Ê•Û‘¶
-	int    playerobj;			//ÌßÚ²Ôƒ‚ƒfƒ‹Ši”[—p
-	int    skyobj;				//‹ó
 
 	bool	_flag;				//true”¿‚ğ’£‚éfalse”¿‚ğ‚½‚½‚Ş
 	bool	fKeyold;
