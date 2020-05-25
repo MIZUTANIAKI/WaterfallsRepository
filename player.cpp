@@ -14,9 +14,6 @@ Player::Player()
 	moveYAngle = 0.0f;	//操作軸の角度初期化
 	moveXAngle = DX_PI_F;
 
-	playerobj = MV1LoadModel("mv/pShip.mv1"); 
-	skyobj = MV1LoadModel("mv/sora.mv1");
-	MV1SetScale(skyobj, VGet(1.0f, 1.0f, 1.0f));
 	kazi = NULL;
 	_flag = true;
 
@@ -68,15 +65,9 @@ void Player::Updata(void)
 
 	pbullet.Run();
 
-	MV1SetPosition(playerobj, VGet(0.0f, 0.0f, 0.0f));	//ﾌﾟﾚｲﾔ座標変更
+	//ﾌﾟﾚｲﾔの向きを変更
 
-	MV1SetRotationXYZ(playerobj, VGet(0.0f, -moveYAngle / 180.0f * DX_PI_F, 0.0f));	//ﾌﾟﾚｲﾔの向きを変更
-
-	MV1SetPosition(playerobj, _pos);	//ﾌﾟﾚｲﾔ座標変更
-	MV1SetPosition(skyobj, _pos);	//ﾌﾟﾚｲﾔ座標変更
-
-	lpSceneMng.AddDrawQue(playerobj);	//ﾌﾟﾚｲﾔ描画要求
-	lpSceneMng.AddDrawQue(skyobj);	//描画要求
+	//描画に投げる
 
 	fKeyold = CheckHitKey(KEY_INPUT_F);
 }

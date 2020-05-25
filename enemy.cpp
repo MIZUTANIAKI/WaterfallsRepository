@@ -36,13 +36,10 @@ Enemy::~Enemy()
 
 void Enemy::Updata(void)
 {
-	MV1SetPosition(enemyobj, VGet(0.0f, 0.0f, 0.0f));	//ﾌﾟﾚｲﾔ座標変更
 
-	MV1SetRotationXYZ(enemyobj, VGet(0.0f, moveYAngle / 180.0f * DX_PI_F, 0.0f));	//ﾌﾟﾚｲﾔの向きを変更
+	//ﾌﾟﾚｲﾔの向きを変更
 
-	MV1SetPosition(enemyobj, _pos);	//ﾌﾟﾚｲﾔ座標変更
-
-	lpSceneMng.AddDrawQue(enemyobj);	//ﾌﾟﾚｲﾔ描画要求
+	//描画に投げる
 
 	fKeyold = CheckHitKey(KEY_INPUT_F);
 }

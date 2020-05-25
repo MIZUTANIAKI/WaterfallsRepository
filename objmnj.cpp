@@ -1,4 +1,5 @@
 #include<DxLib.h>
+#include "Scene/sceneMng.h"
 #include "objmnj.h"
 
 Objmnj* Objmnj::sInstance = nullptr;
@@ -51,7 +52,40 @@ bool Objmnj::CheckHit(UNIT_ID id, int num)
 	{
 		return bulletmodel[num];
 	}
+}
+
+void Objmnj::ObjDraw(UNIT_ID id, int num)
+{
+	if (UNIT_ID::PLAYER == id)
+	{
+		lpSceneMng.AddDrawQue(playerobj);
+		lpSceneMng.AddDrawQue(skyobj);
 	}
+	if (UNIT_ID::CPU == id)
+	{
+		lpSceneMng.AddDrawQue(enemyobj);
+	}
+	if (UNIT_ID::BULLET == id)
+	{
+		lpSceneMng.AddDrawQue(bulletmodel[num]);
+	}
+}
+
+void Objmnj::ObjRotation(UNIT_ID id, float moveangle, int num)
+{
+	if (UNIT_ID::PLAYER == id)
+	{
+		MV1SetRotationXYZ(playerobj, VGet(0.0f, moveangle / 180.0f * DX_PI_F, 0.0f));
+	}
+	if (UNIT_ID::CPU == id)
+	{
+		MV1SetRotationXYZ(enemyobj, VGet(0.0f, moveangle / 180.0f * DX_PI_F, 0.0f));
+	}
+	if (UNIT_ID::BULLET == id)
+	{
+		MV1SetRotationXYZ(bulletmodel[num], VGet(0.0f, moveangle / 180.0f * DX_PI_F, 0.0f));
+	}
+}
 
 Objmnj::Objmnj()
 {
@@ -64,6 +98,8 @@ Objmnj::Objmnj()
 	{
 		bulletmodel[i] = MV1DuplicateModel(bulletobj);
 	}
+
+	MV1SetScale(skyobj, VGet(1.0f, 1.0f, 1.0f));
 }
 
 Objmnj::~Objmnj()

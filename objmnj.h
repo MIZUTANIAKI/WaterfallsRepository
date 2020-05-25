@@ -39,6 +39,9 @@ public:
 
 	bool CheckHit(UNIT_ID id, int num);
 
+	void ObjDraw(UNIT_ID id, int num);
+
+	void ObjRotation(UNIT_ID id,float moveangle, int num);
 
 private:
 	static Objmnj* sInstance;

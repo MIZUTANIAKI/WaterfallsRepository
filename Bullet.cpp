@@ -11,14 +11,12 @@
 
 Bullet::Bullet()
 {
-	bulletobj = MV1LoadModel("mv/bullet.mv1");
 	for (int i = 0; i < BULLETMAX; i++)
 	{
 		_Shotflag[i] = false;
 		_bulletCon[i] = 0;
 		_pos[i] = VGet(0.0f, 0.0f, 0.0f);
 		_direction[i] = VGet(0.0f, 0.0f, 0.0f);
-		bulletmodel[i] = MV1DuplicateModel(bulletobj);
 	}
 }
 
@@ -57,8 +55,7 @@ void Bullet::Run(void)
 	{
 		if (_Shotflag[i] == true)
 		{
-			MV1SetPosition(bulletmodel[i], _pos[i]);
-			lpSceneMng.AddDrawQue(bulletmodel[i]);	//描画要求
+			//描画に投げる
 		}
 	}
 
