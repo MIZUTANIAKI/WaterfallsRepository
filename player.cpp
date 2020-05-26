@@ -3,6 +3,7 @@
 #include "Scene/GameScene.h"
 #include "Bullet.h"
 #include "player.h"
+#include "objmnj.h"
 
 Player::Player()
 {
@@ -66,8 +67,12 @@ void Player::Updata(void)
 	pbullet.Run();
 
 	//ÌßÚ²Ô‚ÌŒü‚«‚ğ•ÏX
+	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
+	//À•Wİ’è
+	lpobjlMng.Setobjpos(_pos, _unitID, 0);
 
 	//•`‰æ‚É“Š‚°‚é
+	lpobjlMng.ObjDraw(_unitID, 0);
 
 	fKeyold = CheckHitKey(KEY_INPUT_F);
 }

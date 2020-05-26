@@ -40,18 +40,19 @@ int Objmnj::Getobjpos(VECTOR pos, UNIT_ID id, int num)
 
 bool Objmnj::CheckHit(UNIT_ID id, int num)
 {
-	if (UNIT_ID::PLAYER == id)
-	{
-		return playerobj;
-	}
-	if (UNIT_ID::CPU == id)
-	{
-		return enemyobj;
-	}
-	if (UNIT_ID::BULLET == id)
-	{
-		return bulletmodel[num];
-	}
+	//if (UNIT_ID::PLAYER == id)
+	//{
+	//	return playerobj;
+	//}
+	//if (UNIT_ID::CPU == id)
+	//{
+	//	return enemyobj;
+	//}
+	//if (UNIT_ID::BULLET == id)
+	//{
+	//	return bulletmodel[num];
+	//}
+	return false;
 }
 
 void Objmnj::ObjDraw(UNIT_ID id, int num)

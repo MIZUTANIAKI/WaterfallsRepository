@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include "Scene/sceneMng.h"
 #include "Bullet.h"
+#include "objmnj.h"
 
 //斜め下に打つのではなく、楕円描きながら落としたい
 //水平に、等速直線運動して、下向きに自由落下している状態らしい
@@ -55,7 +56,11 @@ void Bullet::Run(void)
 	{
 		if (_Shotflag[i] == true)
 		{
+
+			//座標設定
+			lpobjlMng.Setobjpos(_pos[i], UNIT_ID::BULLET, 0);
 			//描画に投げる
+			lpobjlMng.ObjDraw(UNIT_ID::BULLET, i);
 		}
 	}
 

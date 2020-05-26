@@ -4,6 +4,7 @@
 #include "Scene/GameScene.h"
 #include "Bullet.h"
 #include "enemy.h"
+#include "objmnj.h"
 
 Enemy::Enemy()
 {
@@ -37,9 +38,13 @@ Enemy::~Enemy()
 void Enemy::Updata(void)
 {
 
-	//ÌßÚ²Ô‚ÌŒü‚«‚ğ•ÏX
+	//Œü‚«‚ğ•ÏX
+	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
+	//À•Wİ’è
+	lpobjlMng.Setobjpos(_pos, _unitID, 0);
 
 	//•`‰æ‚É“Š‚°‚é
+	lpobjlMng.ObjDraw(_unitID, 0);
 
 	fKeyold = CheckHitKey(KEY_INPUT_F);
 }

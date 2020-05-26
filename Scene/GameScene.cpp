@@ -1,11 +1,12 @@
 #include <time.h>
-#include "GameScene.h"
+#include "objmnj.h"
 #include "Player.h"
 #include "enemy.h"
 #include "SceneMng.h"
 #include "../map.h"
 #include "../Obj.h"
 #include "../Bullet.h"
+#include "GameScene.h"
 
 GameScene::GameScene()
 {

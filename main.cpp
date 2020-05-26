@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "Scene/sceneMng.h"
+#include "objmnj.h"
 
 int main()
 {
