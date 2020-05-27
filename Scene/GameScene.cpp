@@ -14,8 +14,6 @@ GameScene::GameScene()
 	_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
 	ppos = VGet(0.0f, 0.0f, 0.0f);
 	srand((unsigned)time(NULL));								//ŠÔ‚ğg‚Á‚Äƒ‰ƒ“ƒ_ƒ€‚É”š‚ğ“ü‚ê‘Ö‚¦‚é
-
-	lpMapMng;
 }
 
 unique_Base GameScene::Update(unique_Base own)
@@ -35,12 +33,11 @@ unique_Base GameScene::Update(unique_Base own)
 				ppos = (*data.first).GetPos();
 		}
 	}
-
-	lpMapMng.Update();
 	return std::move(own);
 }
 
 
 GameScene::~GameScene()
 {
+	lpobjlMng.Destroy();
 }

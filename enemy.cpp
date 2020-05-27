@@ -12,9 +12,9 @@ Enemy::Enemy()
 	_pos = VGet(0.0f, 0.0f, 0.0f);	//敵の座標初期化
 
 
-	moveVec = VGet(0.0f, 0.0f, 0.0f);
+	moveVec = VGet(1000.0f, 0.0f, -55000.0f);
 	movePos = VGet(0.0f, 5000.0f, 0.0f);	//操作軸の座標初期化
-	moveYAngle = 0.0f;	//操作軸の角度初期化
+	moveYAngle = 180.0f;	//操作軸の角度初期化
 	moveXAngle = DX_PI_F;
 
 	_flag = true;
@@ -41,7 +41,7 @@ void Enemy::Updata(void)
 	//向きを変更
 	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
 	//座標設定
-	lpobjlMng.Setobjpos(_pos, _unitID, 0);
+	lpobjlMng.Setobjpos(_pos, moveVec, _unitID, 0);
 
 	//描画に投げる
 	lpobjlMng.ObjDraw(_unitID, 0);
@@ -51,15 +51,17 @@ void Enemy::Updata(void)
 
 void Enemy::Updata(VECTOR pos)
 {
-	//if(abs(VSub(_pos, pos).z)<3000.0f&& abs(VSub(_pos, pos).x) < 3000.0f)
+	if(abs(VSub(_pos, pos).z)<3000.0f&& abs(VSub(_pos, pos).x) < 3000.0f)
 	{
 		_State = STATE_ID::ACTIVE;
 
 	}
-	/*else
+	else
 	{
 		_State = STATE_ID::STAY;
-	}*/
+	}
+	_State = STATE_ID::STAY;
+
 	_ppos = pos;
 	
 	if (CheckHitKey(KEY_INPUT_F))
@@ -110,54 +112,54 @@ void Enemy::MoveControl(void)
 	else if(_State == STATE_ID::ACTIVE)
 	{
 
-		VECTOR tmpcrossvec = VCross(VSub(_pos, movePos), VSub(_pos, _ppos));
+		//VECTOR tmpcrossvec = VCross(VSub(_pos, movePos), VSub(_pos, _ppos));
 
-		if (tmpcrossvec.x == 0.0f && tmpcrossvec.z == 0.0f)
-		{
-			_LorR = LORR::NON;
-		}
-		if (!signbit(tmpcrossvec.x))
-		{
-			//プラスの場合は、右に
-			_LorR = LORR::RIGHT;
-			moveYAngle += 0.1f;
-			if (moveYAngle >= 180.0f)
-			{
-				moveYAngle -= 360.0f;
-			}
-		}
+		//if (tmpcrossvec.x == 0.0f && tmpcrossvec.z == 0.0f)
+		//{
+		//	_LorR = LORR::NON;
+		//}
+		//if (!signbit(tmpcrossvec.x))
+		//{
+		//	//プラスの場合は、右に
+		//	_LorR = LORR::RIGHT;
+		//	moveYAngle += 0.1f;
+		//	if (moveYAngle >= 180.0f)
+		//	{
+		//		moveYAngle -= 360.0f;
+		//	}
+		//}
 
-		if(!signbit(tmpcrossvec.z))
-		{
-			//プラスの場合は、右に
-			_LorR = LORR::RIGHT;
-			moveYAngle += 0.1f;
-			if (moveYAngle >= 180.0f)
-			{
-				moveYAngle -= 360.0f;
-			}
-		}
-		
-		if (signbit(tmpcrossvec.x))
-		{
-			//マイナスの場合は左に
-			_LorR = LORR::LEFT;
-			moveYAngle -= 0.1f;
-			if (moveYAngle <= -180.0f)
-			{
-				moveYAngle += 360.0f;
-			}
-		}
-		if(signbit(tmpcrossvec.z))
-		{
-			//マイナスの場合は左に
-			_LorR = LORR::LEFT;
-			moveYAngle -= 0.1f;
-			if (moveYAngle <= -180.0f)
-			{
-				moveYAngle += 360.0f;
-			}
-		}
+		//if(!signbit(tmpcrossvec.z))
+		//{
+		//	//プラスの場合は、右に
+		//	_LorR = LORR::RIGHT;
+		//	moveYAngle += 0.1f;
+		//	if (moveYAngle >= 180.0f)
+		//	{
+		//		moveYAngle -= 360.0f;
+		//	}
+		//}
+		//
+		//if (signbit(tmpcrossvec.x))
+		//{
+		//	//マイナスの場合は左に
+		//	_LorR = LORR::LEFT;
+		//	moveYAngle -= 0.1f;
+		//	if (moveYAngle <= -180.0f)
+		//	{
+		//		moveYAngle += 360.0f;
+		//	}
+		//}
+		//if(signbit(tmpcrossvec.z))
+		//{
+		//	//マイナスの場合は左に
+		//	_LorR = LORR::LEFT;
+		//	moveYAngle -= 0.1f;
+		//	if (moveYAngle <= -180.0f)
+		//	{
+		//		moveYAngle += 360.0f;
+		//	}
+		//}
 
 		/*if (_LorR == LORR::RIGHT)
 		{
@@ -195,7 +197,7 @@ void Enemy::MoveControl(void)
 
 	if (_flag)
 	{
-		moveVec.z += 5.0f;
+		moveVec.z += 1.0f;
 	}
 	else
 	{
@@ -216,6 +218,9 @@ void Enemy::MoveControl(void)
 			moveVec.z += 1.0f;
 		}
 	}
+
+
+	//lpobjlMng.ObjCollHit(_pos, &moveVec, _unitID);
 
 	VECTOR tempPos1;
 	VECTOR tempPos2;

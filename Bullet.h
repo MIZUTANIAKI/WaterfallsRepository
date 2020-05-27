@@ -5,7 +5,7 @@
 
 #define S_GRAVITY -9.8/60 //èdóÕâ¡ë¨ìx
 
-#define BULLETMAX 2
+#define BULLETMAX 4
 
 class Bullet
 {

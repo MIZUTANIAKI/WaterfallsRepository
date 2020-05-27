@@ -7,7 +7,7 @@ SceneMng* SceneMng::sInstance = nullptr;
 
 SceneMng::SceneMng() :ScreenSize{1920,1080}
 {
-	_fcon = NULL;
+	
 }
 
 SceneMng::~SceneMng()
@@ -66,7 +66,8 @@ void SceneMng::Run(void)
 	}
 	_activeScene = std::make_unique<GameScene>();
 
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+	_fcon = NULL;
+	while (ProcessMessage() == 0 && (CheckHitKey(KEY_INPUT_ESCAPE) == 0 || systemEnd == 0))
 	{
 		_BulletList.clear();
 		_drawList.clear();
@@ -74,6 +75,11 @@ void SceneMng::Run(void)
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		Draw();
 		_fcon++;
+
+		if (CheckHitKey(KEY_INPUT_SPACE) == 1)
+		{
+			systemEnd = true;
+		}
 	}
 }
 
@@ -90,13 +96,16 @@ bool SceneMng::SysInit(void)
 	SetFontSize(60);
 	SetBackgroundColor(100, 255, 255);
 	SetUseZBufferFlag(TRUE); 
-	SetCameraNearFar(100.0f, 15000.0f);
+	SetCameraNearFar(100.0f, 40000.0f);
 	SetMouseDispFlag(false);	//マウスを非表示に
 	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 	SetLightAmbColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
-	ChangeLightTypeDir(VGet(0.0f, 1.0f, 0.0f));
+	//ChangeLightTypeDir(VGet(0.0f, 1.0f, 0.0f));
 	LightHandle = CreateDirLightHandle(VGet(0.0f, -1.0f, 0.0f));
+	LightHandle2 = CreateDirLightHandle(VGet(0.0f, 1.0f, 0.0f));
 
+	systemEnd = false;
 	return true;
 }
+

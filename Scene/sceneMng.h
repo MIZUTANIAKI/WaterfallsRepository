@@ -58,7 +58,7 @@ public:
 
 
 private:
-
+	bool systemEnd;
 
 
 
@@ -69,6 +69,7 @@ private:
 	unique_Base _activeScene;
 
 	int LightHandle;
+	int LightHandle2;
 
 	std::vector<int> _drawList;	//描画するものを溜めておくキュー
 	std::vector<int> _drawListnex;	//描画するものを溜めておくキュー（すける）

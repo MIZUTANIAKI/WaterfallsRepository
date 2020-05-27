@@ -140,6 +140,6 @@ void Camera::CameraRun(VECTOR targetPos)
 	VECTOR temptempCameraPos= VGet(0.0f, 0.0f, 0.0f);
 	temptempCameraPos = VAdd(tempPos2, tempCameraPos);	//求めた座標に初めにﾌﾟﾚｲﾔ座標で設定した値を加算してカメラ座標とする。
 
-	SetCameraPositionAndTarget_UpVecY(temptempCameraPos, targetPos);
+	SetCameraPositionAndTarget_UpVecY(temptempCameraPos, VAdd(targetPos,VGet(0.0f,1000.0f,0.0f)));
 }
 

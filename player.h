@@ -39,6 +39,7 @@ private:
 	VECTOR movePos;				//‘€ìŽ²‚ÌˆÊ’u
 	
 	VECTOR _pos;				//ÌßÚ²ÔÀ•W
+	VECTOR _tmppPos;
 	VECTOR moveVec;				//ÌßÚ²Ô‚ÌˆÚ“®—Ê•Û‘¶
 
 	bool	_flag;				//true”¿‚ð’£‚éfalse”¿‚ð‚½‚½‚Þ

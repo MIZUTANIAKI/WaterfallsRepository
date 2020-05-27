@@ -58,7 +58,7 @@ void Bullet::Run(void)
 		{
 
 			//座標設定
-			lpobjlMng.Setobjpos(_pos[i], UNIT_ID::BULLET, 0);
+			lpobjlMng.Setobjpos(_pos[i], _direction[i], UNIT_ID::BULLET, 0);
 			//描画に投げる
 			lpobjlMng.ObjDraw(UNIT_ID::BULLET, i);
 		}

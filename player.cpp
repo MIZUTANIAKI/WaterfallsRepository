@@ -23,6 +23,8 @@ Player::Player()
 	fKeyold = false;
 
 	oneCount = GetNowCount();
+
+	_tmppPos = _pos;
 }
 
 Player::~Player()
@@ -69,16 +71,24 @@ void Player::Updata(void)
 	//Ãﬂ⁄≤‘ÇÃå¸Ç´ÇïœçX
 	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
 	//ç¿ïWê›íË
-	lpobjlMng.Setobjpos(_pos, _unitID, 0);
+	lpobjlMng.Setobjpos(_pos, moveVec, _unitID, 0);
 
 	//ï`âÊÇ…ìäÇ∞ÇÈ
 	lpobjlMng.ObjDraw(_unitID, 0);
 
 	fKeyold = CheckHitKey(KEY_INPUT_F);
+
+	VECTOR tmpvec = VNorm(VSub(_pos, movePos));
+	tmpvec.x *= 2500.0f;
+	tmpvec.z *= 2500.0f;
+	tmpvec.y = 0;
+	_tmppPos = _pos;
+	_pos = VAdd(_pos, tmpvec);
 }
 
 void Player::MoveControl(void)
 {
+	_pos = _tmppPos;
 
 	//ëÄçÏ
 	if (CheckHitKey(KEY_INPUT_LEFT))
@@ -211,6 +221,7 @@ void Player::MoveControl(void)
 		}
 	}
 
+
 	VECTOR tempPos1;
 	VECTOR tempPos2;
 	VECTOR tempMovePos;
@@ -226,7 +237,7 @@ void Player::MoveControl(void)
 	tempf1 = static_cast<float>(sin(1.0f / 180.0f * static_cast<double>(DX_PI_F)));
 	tempf2 = static_cast<float>(cos(1.0f / 180.0f * static_cast<double>(DX_PI_F)));
 	tempPos1.x = 0.0f;
-	tempPos1.y = tempf1 * MOVE_DISTANCE;
+	tempPos1.y = 0.0f;
 	tempPos1.z = -tempf2 * MOVE_DISTANCE;
 
 	//ëÄçÏé≤ÇÃâ°ÇÃäpìxÇãÅÇﬂÇÈ
@@ -239,6 +250,8 @@ void Player::MoveControl(void)
 	movePos = VAdd(tempPos2, tempMovePos);
 
 
+	lpobjlMng.ObjCollHit(_pos, &moveVec,_unitID);
+
 	temp1 = static_cast<float>(sin(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
 	temp2 = static_cast<float>(cos(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
 
@@ -248,9 +261,11 @@ void Player::MoveControl(void)
 
 	tempMoveVec.z = moveVec.x * temp1 + moveVec.z * temp2;
 
-	moveVec = VGet(0.0f, 0.0f, 0.0f);
+	moveVec = tempMoveVec;
 
-	_pos = VAdd(_pos, tempMoveVec);
+	_pos = VAdd(_pos,moveVec);
+
+	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
