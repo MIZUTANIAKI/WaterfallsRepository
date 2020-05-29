@@ -73,8 +73,7 @@ private:
 	UNIT_ID	enemy;					//“Gƒ‚ƒfƒ‹Ši”[—p
 	UNIT_ID	bullet[BULLETMAX];		//’e
 
-	MV1_COLL_RESULT_POLY_DIM pHit;
-	MV1_COLL_RESULT_POLY_DIM eHit;
+
 
 	Objmnj();
 	~Objmnj();

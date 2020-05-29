@@ -25,6 +25,11 @@ Player::Player()
 	oneCount = GetNowCount();
 
 	_tmppPos = _pos;
+
+	//ﾌﾟﾚｲﾔの向きを変更
+	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
+	//座標設定
+	lpobjlMng.Setobjpos(_pos, moveVec, _unitID, 0);
 }
 
 Player::~Player()
@@ -231,6 +236,8 @@ void Player::MoveControl(void)
 	float  temp1;
 	float  temp2;
 
+	lpobjlMng.ObjCollHit(_pos, &moveVec,_unitID);
+
 	tempMovePos = _pos;	//操作軸の位置をﾌﾟﾚｲﾔ座標で初期化
 
 	//操作軸の高さの角度を求める
@@ -250,7 +257,6 @@ void Player::MoveControl(void)
 	movePos = VAdd(tempPos2, tempMovePos);
 
 
-	lpobjlMng.ObjCollHit(_pos, &moveVec,_unitID);
 
 	temp1 = static_cast<float>(sin(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
 	temp2 = static_cast<float>(cos(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));

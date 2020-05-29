@@ -12,7 +12,7 @@ Enemy::Enemy()
 	_pos = VGet(0.0f, 0.0f, 0.0f);	//“G‚ÌÀ•W‰Šú‰»
 
 
-	moveVec = VGet(1000.0f, 0.0f, -55000.0f);
+	moveVec = VGet(1000.0f, 0.0f, -10000.0f);
 	movePos = VGet(0.0f, 5000.0f, 0.0f);	//‘€ì²‚ÌÀ•W‰Šú‰»
 	moveYAngle = 180.0f;	//‘€ì²‚ÌŠp“x‰Šú‰»
 	moveXAngle = DX_PI_F;
@@ -275,3 +275,4 @@ void Enemy::MoveControl(void)
 		nbullet1.SetBullet(VAdd(_pos, VGet(0.0f, 100.0f, 0.0f)), VNorm(VSub(tmpvec1, tmpvec2)));
 	}
 }
+
