@@ -36,18 +36,14 @@ void Bullet::Run(void)
 			tmpmove.z = _direction[i].z;
 			tmpmove.y = 0.0f;
 			tmpvec = VAdd(_pos[i], tmpmove);
-
 			//初速*時間+(重力加速度*時間)/2
 			tmpvec.y += -1*(100 * _bulletCon[i]/60 + static_cast<float>(S_GRAVITY * _bulletCon[i]/60)*2 / 2);
-
 			//判定処理　
 			if (tmpvec.y < 0)
 			{
 				_Shotflag[i] = false;
 			}
-
 			_pos[i] = tmpvec;
-
 			_bulletCon[i]++;
 		}
 	}
@@ -56,7 +52,6 @@ void Bullet::Run(void)
 	{
 		if (_Shotflag[i] == true)
 		{
-
 			//座標設定
 			lpobjlMng.Setobjpos(_pos[i], _direction[i], UNIT_ID::BULLET, 0);
 			//描画に投げる
@@ -81,15 +76,12 @@ void Bullet::SetBullet(VECTOR pos, VECTOR vec)
 			{
 				tmpmat = MGetRotY(static_cast<float>((DX_PI / 180) * 90));
 			}
-			
 			_pos[i] = pos;
 			_pos[i].y = 800;
 			_direction[i] = VNorm(VTransform(vec, tmpmat));
 			_direction[i].x *= 100;
 			_direction[i].z *= 100;
-
 			_bulletCon[i] = 0;
-
 			_Shotflag[i] = true;
 		}
 	}

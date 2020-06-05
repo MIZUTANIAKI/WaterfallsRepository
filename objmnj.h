@@ -12,6 +12,7 @@
 
 #define lpobjlMng Objmnj::GetInstance()
 
+//モデル情報を管理するマネージャークラスです！
 class Objmnj
 {
 public:
@@ -39,19 +40,17 @@ public:
 		sInstance = nullptr;
 	}
 
-	void Setobjpos(VECTOR pos, VECTOR vec, UNIT_ID id, int num);
+	void Setobjpos(VECTOR pos, VECTOR vec, UNIT_ID id, int num);	//位置情報をセット idで、判別
 
-	int Getobjpos(VECTOR pos, UNIT_ID id, int num);
+	int Getobjpos(VECTOR pos, UNIT_ID id, int num);					//位置情報を返す。
 
-	UNIT_ID CheckHit(UNIT_ID id, int num);
+	UNIT_ID CheckHit(UNIT_ID id, int num);							//あったってるか確認用**現在使用不可**								
 
-	void TryHit(void);
+	void ObjDraw(UNIT_ID id, int num);								//これを呼ぶと、描画要求を、sceneマネージャにします
 
-	void ObjDraw(UNIT_ID id, int num);
+	void ObjRotation(UNIT_ID id,float moveangle, int num);			//回転情報（見た目）をセット
 
-	void ObjRotation(UNIT_ID id,float moveangle, int num);
-
-	void ObjCollHit(VECTOR pos, VECTOR* moveVec,UNIT_ID id);
+	void ObjCollHit(VECTOR pos, VECTOR* moveVec,UNIT_ID id);		//当たり判定チェック用**現在作業中**
 
 private:
 	static Objmnj* sInstance;
@@ -62,18 +61,16 @@ private:
 	int		bulletobj;				//弾モデル格納用
 	int		bulletmodel[BULLETMAX];	//弾モデル格納(多数)用
 	int		mapmodel;				//海モデル格納用
-	VECTOR	pvec;
-	VECTOR	evec;
-	VECTOR	bvec[BULLETMAX];
-	VECTOR	ppos;
-	VECTOR	epos;
-	VECTOR	bpos[BULLETMAX];
+	VECTOR	pvec;					//プレイヤ移動ベクトル
+	VECTOR	evec;					//敵の移動ベクトル　　　**のちに配列に**
+	VECTOR	bvec[BULLETMAX];		//弾の移動ベクトル
+	VECTOR	ppos;					//プレイヤー座標
+	VECTOR	epos;					//敵座標
+	VECTOR	bpos[BULLETMAX];		//弾座標
 
 	UNIT_ID	player;					//ﾌﾟﾚｲﾔモデル格納用
 	UNIT_ID	enemy;					//敵モデル格納用
 	UNIT_ID	bullet[BULLETMAX];		//弾
-
-
 
 	Objmnj();
 	~Objmnj();

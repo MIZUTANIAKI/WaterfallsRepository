@@ -2,8 +2,8 @@
 
 Obj::Obj()
 {
-	_unitID = UNIT_ID::CPU;
-	_pos = VGet(0.0f, 0.0f, 0.0f);	//ÌßÚ²ÔÀ•W‰Šú‰»
+	_unitID = UNIT_ID::NON;			//–¢Ý’è‚É
+	_pos = VGet(0.0f, 0.0f, 0.0f);	//À•W‰Šú‰»
 }
 
 

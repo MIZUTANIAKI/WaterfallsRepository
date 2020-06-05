@@ -11,22 +11,16 @@ Enemy::Enemy()
 	_unitID = UNIT_ID::CPU;
 	_pos = VGet(0.0f, 0.0f, 0.0f);	//ìGÇÃç¿ïWèâä˙âª
 
-
 	moveVec = VGet(1000.0f, 0.0f, -10000.0f);
 	movePos = VGet(0.0f, 5000.0f, 0.0f);	//ëÄçÏé≤ÇÃç¿ïWèâä˙âª
 	moveYAngle = 180.0f;	//ëÄçÏé≤ÇÃäpìxèâä˙âª
 	moveXAngle = DX_PI_F;
 
 	_flag = true;
-
 	_flagcon = 10;
-
 	fKeyold = false;
-
 	oneCount = GetNowCount();
-
 	_ppos = VGet(0.0f, 0.0f, 0.0f);
-
 	_State = STATE_ID::STAY;
 	_LorR = LORR::NON;
 }
@@ -42,10 +36,8 @@ void Enemy::Updata(void)
 	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
 	//ç¿ïWê›íË
 	lpobjlMng.Setobjpos(_pos, moveVec, _unitID, 0);
-
 	//ï`âÊÇ…ìäÇ∞ÇÈ
 	lpobjlMng.ObjDraw(_unitID, 0);
-
 	fKeyold = CheckHitKey(KEY_INPUT_F);
 }
 
@@ -54,14 +46,12 @@ void Enemy::Updata(VECTOR pos)
 	if(abs(VSub(_pos, pos).z)<3000.0f&& abs(VSub(_pos, pos).x) < 3000.0f)
 	{
 		_State = STATE_ID::ACTIVE;
-
 	}
 	else
 	{
 		_State = STATE_ID::STAY;
 	}
 	_State = STATE_ID::STAY;
-
 	_ppos = pos;
 	
 	if (CheckHitKey(KEY_INPUT_F))
@@ -85,33 +75,25 @@ void Enemy::Updata(VECTOR pos)
 		// ÇPïbÇΩÇ¡ÇƒÇ¢ÇÈÇ©
 		if (GetNowCount() - oneCount > 1000)
 		{
-
 			_flagcon--;
-
 			oneCount = GetNowCount();
 		}
-
-
 	}
 
 	MoveControl();
-
 	nbullet1.Run();
-
 }
 
 void Enemy::MoveControl(void)
 {
-	
-
-
 	if(_State == STATE_ID::STAY)
 	{
-		
 	}
 	else if(_State == STATE_ID::ACTIVE)
 	{
-
+	}
+	else if(_State == STATE_ID::ESCAPE)
+	{
 		//VECTOR tmpcrossvec = VCross(VSub(_pos, movePos), VSub(_pos, _ppos));
 
 		//if (tmpcrossvec.x == 0.0f && tmpcrossvec.z == 0.0f)
@@ -160,7 +142,7 @@ void Enemy::MoveControl(void)
 		//		moveYAngle += 360.0f;
 		//	}
 		//}
-
+		
 		/*if (_LorR == LORR::RIGHT)
 		{
 			moveYAngle += 0.1f;
@@ -183,17 +165,12 @@ void Enemy::MoveControl(void)
 		{
 
 		}*/
-
+	
 	}
 	
 	//if ( _pos.x > _ppos.x/*&&  _pos.z > _ppos.z*/)
 	//{
-
 	//}
-
-	
-
-	
 
 	if (_flag)
 	{
@@ -218,10 +195,7 @@ void Enemy::MoveControl(void)
 			moveVec.z += 1.0f;
 		}
 	}
-
-
 	//lpobjlMng.ObjCollHit(_pos, &moveVec, _unitID);
-
 	VECTOR tempPos1;
 	VECTOR tempPos2;
 	VECTOR tempMovePos;
@@ -249,26 +223,21 @@ void Enemy::MoveControl(void)
 
 	movePos = VAdd(tempPos2, tempMovePos);
 
-
 	temp1 = static_cast<float>(sin(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
 	temp2 = static_cast<float>(cos(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
 
 	tempMoveVec.x = moveVec.x * temp2 - moveVec.z * temp1;
-
 	tempMoveVec.y = 0.0f;
-
 	tempMoveVec.z = moveVec.x * temp1 + moveVec.z * temp2;
 
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
-
 	_pos = VAdd(_pos, tempMoveVec);
 
 	float tmptmpfl = Segment_Segment_MinLength(_pos, _pos, _ppos, _ppos);
-
 	if (_State == STATE_ID::ACTIVE &&tmptmpfl<1000.0f)/*(abs(VSub(_ppos,_pos ).x) < 1000.0f&& abs(VSub(_ppos, _pos).z) < 1000.0f)*/
 	{
 		VECTOR tmpvec1 = _pos, tmpvec2 = movePos;
-
+	
 		tmpvec1.y = 0.0f;
 		tmpvec2.y = 0.0f;
 

@@ -13,10 +13,10 @@
 
 enum class STATE_ID			//それぞれの立場
 {
-	STAY,
-	ACTIVE,
-	ESCAPE
-};
+	STAY,			//待機
+	ACTIVE,			//目標に進む
+	ESCAPE			//逃げる
+};	
 
 enum class LORR
 {
@@ -42,16 +42,15 @@ public:
 		return _pos;
 	}
 
-	void Updata(void) override;
+	void Updata(void) override;	//敵の更新用
 
-	void Updata(VECTOR pos) override;
+	void Updata(VECTOR pos) override;	//敵の更新2プレイヤー情報取得用
 
 private:
-	STATE_ID _State;
+	STATE_ID _State;			//敵の状態
 
-	LORR _LorR;
-	VECTOR _ppos;
-	VECTOR _direction;
+	LORR _LorR;					//敵から見てプレイヤーはどっちにいるのか
+	VECTOR _ppos;				//プレイヤー座標
 
 	void	MoveControl(void);	//自機の移動処理
 
@@ -59,16 +58,16 @@ private:
 	float	moveXAngle;			//操作軸の横の角度
 	VECTOR	movePos;			//操作軸の位置
 
-	VECTOR	_pos;				//座標
+	//VECTOR	_pos;				//座標
 	VECTOR	moveVec;			//移動量保存
 
 	bool	_flag;				//true＝帆を張るfalse＝帆をたたむ
-	bool	fKeyold;
-	int		_flagcon;
+	bool	fKeyold;			//敵はたたまないようにしようかな
+	int		_flagcon;			//旗のカウント
 
-	int		oneCount;
+	int		oneCount;			//一秒計測用
 
-	Bullet	nbullet1;
+	Bullet	nbullet1;			//敵の弾呼び出しよう
 
 };
 

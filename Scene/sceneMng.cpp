@@ -7,7 +7,6 @@ SceneMng* SceneMng::sInstance = nullptr;
 
 SceneMng::SceneMng() :ScreenSize{1920,1080}
 {
-	
 }
 
 SceneMng::~SceneMng()
@@ -39,14 +38,12 @@ std::vector<BulletQueT> SceneMng::GetBulletList(void)
 void SceneMng::Draw(void)
 {
 	ClsDrawScreen();
-
 	//’Êí•¨‚ğ‚·‚×‚Ä•`‰æŒãAƒKƒ‰ƒX‚È‚Ç‚Ì“§‚¯‚½‚¢‚à‚Ì‚ğ•`‰æ‚·‚é‚Æ‚¢‚¢‚æ‚¤‚¾
-		//ˆê‚Â‚¸‚Â•`‰æ
+	//ˆê‚Â‚¸‚Â•`‰æ
 	for (auto dQue : _drawList)
 	{
 		MV1DrawModel(dQue);
 	}
-
 	//‚·‚¯‚é‚Ì‚ğ•`‰æ
 	for (auto dQue : _drawListnex)
 	{

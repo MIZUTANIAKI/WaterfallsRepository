@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "enemy.h"
 #include "SceneMng.h"
-#include "../map.h"
 #include "../Obj.h"
 #include "../Bullet.h"
 #include "GameScene.h"
@@ -24,9 +23,7 @@ unique_Base GameScene::Update(unique_Base own)
 		{
 			(*data.first).Updata(ppos);	//更新処理
 		}
-
 		(*data.first).Updata();	//更新処理
-
 		if (data.second == UNIT_ID::PLAYER)
 		{
 				cam.CameraRun((*data.first).GetPos());
@@ -41,3 +38,4 @@ GameScene::~GameScene()
 {
 	lpobjlMng.Destroy();
 }
+

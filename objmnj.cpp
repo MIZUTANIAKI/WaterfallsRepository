@@ -63,11 +63,6 @@ UNIT_ID Objmnj::CheckHit(UNIT_ID id, int num)
 	return UNIT_ID::NON;
 }
 
-void Objmnj::TryHit(void)
-{
-
-}
-
 void Objmnj::ObjDraw(UNIT_ID id, int num)
 {
 	if (UNIT_ID::PLAYER == id)
@@ -139,23 +134,21 @@ Objmnj::~Objmnj()
 /*, F* */
 void Objmnj::ObjCollHit(VECTOR pos, VECTOR* moveVec, UNIT_ID id)
 {
-	MV1RefreshCollInfo(playerobj, -1);
-	MV1RefreshCollInfo(enemyobj, -1);
+	//MV1RefreshCollInfo(playerobj, -1);
+	//MV1RefreshCollInfo(enemyobj, -1);
+	//MV1_COLL_RESULT_POLY_DIM hit1;
+	//MV1_COLL_RESULT_POLY_DIM hit2;
 
+	//VECTOR tmppos1, tmppos2;
+	//tmppos1 = ppos;
+	//tmppos2 = ppos;
 
-	MV1_COLL_RESULT_POLY_DIM hit1;
-	MV1_COLL_RESULT_POLY_DIM hit2;
+	//MV1CollCheck_Capsuleが動かない？？？0が入ってる？？？エラーで落ちる！！
 
-	VECTOR tmppos1, tmppos2;
-	tmppos1 = ppos;
-	tmppos2 = ppos;
+	//hit1 = MV1CollCheck_Capsule(enemyobj, -1, tmppos1, tmppos2, 100.0f);
 
-
-	hit1 = MV1CollCheck_Capsule(enemyobj, -1, tmppos1, tmppos2, 100.0f);
-
-	
 	//当たり判定情報の後始末
-	MV1CollResultPolyDimTerminate(hit1);
+	//MV1CollResultPolyDimTerminate(hit1);
 }
 
 	//MV1RefreshCollInfo(playerobj, -1);

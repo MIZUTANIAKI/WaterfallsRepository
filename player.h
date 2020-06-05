@@ -31,22 +31,22 @@ public:
 	void Updata(void) override;
 
 private:
-	void MoveControl(void);	//自機の移動処理
-	int kazi;
-
+	void MoveControl(void);	//ﾌﾟﾚｲﾔ移動処理
+	int kazi;				//舵を切る
+			
 	float  moveYAngle;			//操作軸の横の角度
 	float  moveXAngle;			//操作軸の横の角度
 	VECTOR movePos;				//操作軸の位置
 	
-	VECTOR _pos;				//ﾌﾟﾚｲﾔ座標
+	//VECTOR _pos;				//ﾌﾟﾚｲﾔ座標
 	VECTOR _tmppPos;
 	VECTOR moveVec;				//ﾌﾟﾚｲﾔの移動量保存
 
 	bool	_flag;				//true＝帆を張るfalse＝帆をたたむ
-	bool	fKeyold;
-	int		_flagcon;
+	bool	fKeyold;			//Fが前のフレームに押されているか
+	int		_flagcon;			//帆のカウント
 
-	int		oneCount;
+	int		oneCount;			//一秒計測用
 
-	Bullet pbullet;
+	Bullet pbullet;				//ﾌﾟﾚｲﾔ弾格納用
 };

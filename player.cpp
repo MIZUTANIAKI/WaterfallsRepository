@@ -17,13 +17,9 @@ Player::Player()
 
 	kazi = NULL;
 	_flag = true;
-
 	_flagcon = 10;
-
 	fKeyold = false;
-
 	oneCount = GetNowCount();
-
 	_tmppPos = _pos;
 
 	//ÌßÚ²Ô‚ÌŒü‚«‚ð•ÏX
@@ -53,24 +49,17 @@ void Player::Updata(void)
 			}
 		}
 	}
-	
+
 	if (!_flag)
-	{	
+	{
 		// ‚P•b‚½‚Á‚Ä‚¢‚é‚©
 		if (GetNowCount() - oneCount > 1000)
 		{
-
 			_flagcon--;
-			
 			oneCount = GetNowCount();
 		}
-
-		
 	}
-
-
 	MoveControl();
-
 	pbullet.Run();
 
 	//ÌßÚ²Ô‚ÌŒü‚«‚ð•ÏX
@@ -94,7 +83,6 @@ void Player::Updata(void)
 void Player::MoveControl(void)
 {
 	_pos = _tmppPos;
-
 	//‘€ì
 	if (CheckHitKey(KEY_INPUT_LEFT))
 	{
@@ -125,7 +113,7 @@ void Player::MoveControl(void)
 		{
 			if (kazi > 0)
 			{
-				kazi-=2;
+				kazi -= 2;
 				if (kazi < 0)
 				{
 					kazi = NULL;
@@ -133,7 +121,7 @@ void Player::MoveControl(void)
 			}
 			else if (kazi < 0)
 			{
-				kazi+=2;
+				kazi += 2;
 				if (kazi > 0)
 				{
 					kazi = NULL;
@@ -145,7 +133,6 @@ void Player::MoveControl(void)
 			}
 		}
 	}
-
 	if (kazi > 2)
 	{
 		if (kazi > 6)
@@ -173,7 +160,6 @@ void Player::MoveControl(void)
 			}
 		}
 	}
-
 	if (kazi < -2)
 	{
 		if (kazi < -6)
@@ -201,7 +187,6 @@ void Player::MoveControl(void)
 			}
 		}
 	}
-
 	if (_flag)
 	{
 		moveVec.z += 5.0f;
@@ -226,7 +211,6 @@ void Player::MoveControl(void)
 		}
 	}
 
-
 	VECTOR tempPos1;
 	VECTOR tempPos2;
 	VECTOR tempMovePos;
@@ -236,7 +220,7 @@ void Player::MoveControl(void)
 	float  temp1;
 	float  temp2;
 
-	lpobjlMng.ObjCollHit(_pos, &moveVec,_unitID);
+	lpobjlMng.ObjCollHit(_pos, &moveVec, _unitID);
 
 	tempMovePos = _pos;	//‘€ìŽ²‚ÌˆÊ’u‚ðÌßÚ²ÔÀ•W‚Å‰Šú‰»
 
@@ -253,34 +237,22 @@ void Player::MoveControl(void)
 	tempPos2.x = tempf2 * tempPos1.x - tempf1 * tempPos1.z;
 	tempPos2.y = tempPos1.y;
 	tempPos2.z = tempf1 * tempPos1.x + tempf2 * tempPos1.z;
-
 	movePos = VAdd(tempPos2, tempMovePos);
-
-
-
 	temp1 = static_cast<float>(sin(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
 	temp2 = static_cast<float>(cos(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
-
 	tempMoveVec.x = moveVec.x * temp2 - moveVec.z * temp1;
-
 	tempMoveVec.y = 0.0f;
-
 	tempMoveVec.z = moveVec.x * temp1 + moveVec.z * temp2;
-
 	moveVec = tempMoveVec;
-
-	_pos = VAdd(_pos,moveVec);
-
+	_pos = VAdd(_pos, moveVec);
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
-		VECTOR tmpvec1= _pos, tmpvec2= movePos;
-
+		VECTOR tmpvec1 = _pos, tmpvec2 = movePos;
 		tmpvec1.y = 0.0f;
 		tmpvec2.y = 0.0f;
-
-		pbullet.SetBullet(VAdd(_pos,VGet(0.0f,100.0f,0.0f)), VNorm(VSub(tmpvec1, tmpvec2)));
+		pbullet.SetBullet(VAdd(_pos, VGet(0.0f, 100.0f, 0.0f)), VNorm(VSub(tmpvec1, tmpvec2)));
 	}
 }
 

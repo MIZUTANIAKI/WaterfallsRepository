@@ -20,11 +20,11 @@ public:
 private:
 	void CameraInit(void);
 
-	VECTOR	_Pos;
+	VECTOR	_Pos;					//カメラ座標
 	float	cameraYAngle;			//カメラ横の角度
 	float	cameraXAngle;			//カメラ縦の角度
 	float	cameraDistance;			//カメラ距離
 
 
-	Vector2 mouse;
+	Vector2 mouse;					//マウス位置情報格納用
 };

@@ -10,17 +10,12 @@ class GameScene :
 	public BaseScene
 {
 public:
-	unique_Base Update(unique_Base own) override;			//シーンを、更新する。
+	unique_Base Update(unique_Base own) override;		//シーンを、更新する。
 	GameScene();
 	~GameScene();
-
 private:
-
-
-
-	Camera cam;
+	Camera cam;											//カメラクラス格納
 	std::vector<std::pair<shardObj, UNIT_ID>> _objList;	//アライブになっている存在を管理する。
-
-	VECTOR ppos;
+	VECTOR ppos;										//プレイヤー座標渡し用
 };
 

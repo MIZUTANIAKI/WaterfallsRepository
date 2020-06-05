@@ -7,6 +7,7 @@
 
 #define BULLETMAX 4
 
+
 class Bullet
 {
 public:
@@ -17,10 +18,10 @@ public:
 
 	void SetBullet(VECTOR pos,VECTOR vec);
 private:
-	VECTOR	_pos[BULLETMAX];
-	VECTOR	_direction[BULLETMAX];
-	bool	_Shotflag[BULLETMAX];
+	VECTOR	_pos[BULLETMAX];		//弾の座標
+	VECTOR	_direction[BULLETMAX];	//弾の向き
+	bool	_Shotflag[BULLETMAX];	//弾のフラグ
 
-	int		_bulletCon[BULLETMAX];
+	int		_bulletCon[BULLETMAX];	//弾の装填に使用する予定ですが、プレイヤーと、エネミーに変数を持たせるか考え中
 };
 

@@ -30,10 +30,7 @@ void Camera::CameraInit(void)
 
 void Camera::CameraRun(VECTOR targetPos)
 {
-
 	GetMousePoint(&mouse.x, &mouse.y);
-
-
 	if ((GetMouseInput() & MOUSE_INPUT_MIDDLE) != 0)
 	{
 		// ホイールオン
@@ -43,7 +40,6 @@ void Camera::CameraRun(VECTOR targetPos)
 	else
 	{	
 		cameraDistance -= static_cast<float>(GetMouseWheelRotVol()*50);
-
 		if (cameraDistance < 400)
 		{
 			cameraDistance = 400;
@@ -52,7 +48,6 @@ void Camera::CameraRun(VECTOR targetPos)
 		{
 			cameraDistance = CAMERA_DISTANCE*3;
 		}
-
 		// ホイールオフ
 		if (lpSceneMng.ScreenSize.x / 2 - 100 >= mouse.x)	//CheckHitKey(KEY_INPUT_A)
 		{
@@ -64,7 +59,6 @@ void Camera::CameraRun(VECTOR targetPos)
 			}
 
 		}
-
 		if (lpSceneMng.ScreenSize.x / 2 + 100 <= mouse.x)
 		{
 			mouse.x = lpSceneMng.ScreenSize.x / 2 + 100;
@@ -75,7 +69,6 @@ void Camera::CameraRun(VECTOR targetPos)
 				cameraYAngle += 360.0f;
 			}
 		}
-
 		if (lpSceneMng.ScreenSize.y / 2 - 100 >= mouse.y)
 		{
 			mouse.y = lpSceneMng.ScreenSize.y / 2 - 100;
@@ -86,7 +79,6 @@ void Camera::CameraRun(VECTOR targetPos)
 				cameraXAngle += 360.0f;
 			}
 		}
-
 		if (lpSceneMng.ScreenSize.y / 2 + 100 <= mouse.y)
 		{
 			mouse.y = lpSceneMng.ScreenSize.y / 2 + 100;
@@ -96,9 +88,7 @@ void Camera::CameraRun(VECTOR targetPos)
 			{
 				cameraXAngle -= 360.0f;
 			}
-
 		}
-
 		if (cameraXAngle < -5.0f)
 		{
 			cameraXAngle = -5.0f;
@@ -107,14 +97,8 @@ void Camera::CameraRun(VECTOR targetPos)
 		{
 			cameraXAngle = 20.0f;
 		}
-
 		SetMousePoint(mouse.x, mouse.y);
-
 	}
-
-
-
-
 	VECTOR tempPos1= VGet(0.0f, 0.0f, 0.0f);
 	VECTOR tempPos2= VGet(0.0f, 0.0f, 0.0f);
 	VECTOR tempCameraPos= VGet(0.0f, 0.0f, 0.0f);
@@ -136,7 +120,6 @@ void Camera::CameraRun(VECTOR targetPos)
 	tempPos2.x = pCos * tempPos1.x - pSin * tempPos1.z;
 	tempPos2.y = tempPos1.y;
 	tempPos2.z = pSin * tempPos1.x + pCos * tempPos1.z;
-
 	VECTOR temptempCameraPos= VGet(0.0f, 0.0f, 0.0f);
 	temptempCameraPos = VAdd(tempPos2, tempCameraPos);	//求めた座標に初めにﾌﾟﾚｲﾔ座標で設定した値を加算してカメラ座標とする。
 
