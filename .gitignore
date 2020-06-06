@@ -34,3 +34,7 @@
 /.vs/WaterfallsRepository/v16
 /.vs/ProjectSettings.json
 /.vs/VSWorkspaceState.json
+
+#3dモデル
+.x
+.mv1
