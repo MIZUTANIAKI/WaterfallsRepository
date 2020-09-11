@@ -10,10 +10,11 @@
 #include "MenuScene.h"
 #include "PadMng.h"
 #include "SoundMnj.h"
-
+#include "EndScene.h"
 
 GameScene::GameScene()
 {
+	SetWindowText("LineBattleoftheShip::ゲーム");
 	_objList.emplace_back(new(Player),UNIT_ID::PLAYER);
 	_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
 	_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
@@ -25,6 +26,16 @@ GameScene::GameScene()
 	lpSudlMng.CheckSEList(std::string("sound/bann.wav"));
 	cpy_ = 200;
 	lrSF_ = 0;
+
+	if (rand() % 2 == 0)
+	{
+		SetFogColor(255, 150, 0);
+	}
+	else
+	{
+		SetFogColor(100, 100, 100);
+	}
+	pHp_ = 255;
 }
 
 UNBS GameScene::Update(UNBS own)
@@ -33,42 +44,53 @@ UNBS GameScene::Update(UNBS own)
 	{
 		return std::make_unique<MenuScene>(std::move(own));
 	}
-
-
-	for (auto data : _objList)
+	if (pHp_ <= 0)
 	{
-		if (data.second == UNIT_ID::CPU)
+		return std::make_unique<EndScene>();
+	}
+	else
+	{
+		for (auto data : _objList)
 		{
-			(*data.first).Updata(ppos);	//更新処理
-		}
-		(*data.first).Updata();	//更新処理
-		if (data.second == UNIT_ID::PLAYER)
-		{
+			if (data.second == UNIT_ID::CPU)
+			{
+				(*data.first).Updata(ppos);	//更新処理
+				if ((*data.first).GetPos().z <= -4950)
+				{
+					pHp_ -= 5;
+				}
+			}
+			(*data.first).Updata();	//更新処理
+			if (data.second == UNIT_ID::PLAYER)
+			{
 				cam.CameraRun((*data.first).GetPos());
 				ppos = (*data.first).GetPos();
-				lrSF_ = (*data.first).GetSLR()^1;
+				lrSF_ = (*data.first).GetSLR() ^ 1;
+			}
 		}
-	}
 
 
-	if (lpSceneMng.GetFcon() / 60 % 2 == 0)
-	{
-		cpy_ -= 0.2f;
+		if (lpSceneMng.GetFcon() / 60 % 2 == 0)
+		{
+			cpy_ -= 0.2f;
+		}
+		else
+		{
+			cpy_ += 0.2f;
+		}
+		if (gcon_ <= 60 * 6)
+		{
+			lpImglMng.AddImg(std::string("img/sous3.png"), lpSceneMng.ScreenSize / 2);
+		}
+		else
+		{
+			VECTOR tp = ppos;
+			tp.y = 0;
+			lpobjlMng.Setobjpos(VAdd(tp, VGet(0.0f, cpy_ - 220, 0.0f)), VGet(0.0f, 0.0f, 0.0f), UNIT_ID::NON, 0);
+			lpImglMng.AddImg(std::string("img/lr.png"), lpSceneMng.ScreenSize / 2, lrSF_);
+		}
+		gcon_++;
 	}
-	else
-	{
-		cpy_ += 0.2f;
-	}
-	lpobjlMng.Setobjpos(VGet(500.0f, cpy_ - 200, 0.0f), VGet(0.0f, 0.0f, 0.0f), UNIT_ID::NON, 0);
-	if (gcon_ <= 60 * 6)
-	{
-		lpImglMng.AddImg(std::string("img/sous3.png"), lpSceneMng.ScreenSize / 2);
-	}
-	else
-	{
-		lpImglMng.AddImg(std::string("img/lr.png"), lpSceneMng.ScreenSize / 2, lrSF_);
-	}
-	gcon_++;
 	return std::move(own);
 }
 
@@ -85,6 +107,27 @@ void GameScene::Draw(void)
 	if (gcon_ <= 60 * 6)
 	{
 		DxLib::DrawFormatString(0, 0, 0x000000, "あと[ %d ]秒で始まるよ", (3 - gcon_ / 120));
+	}
+	else
+	{
+		DxLib::DrawBox(lpSceneMng.ScreenSize.x/2 -300, 0, lpSceneMng.ScreenSize.x/2 - 300+ 255, 30, 0xffffff, true);
+		DxLib::DrawBox(lpSceneMng.ScreenSize.x/2 - 300, 0, lpSceneMng.ScreenSize.x/2 - 300+ 255, 30, 0x000000, false);
+
+		int c = 0;
+		if (pHp_ > 100)
+		{
+			c = GetColor(255 - pHp_, 150, pHp_);
+		}
+		else if (pHp_ > 40)
+		{
+			c = GetColor(255 - pHp_, 80, 0);
+		}
+		else
+		{
+			c = GetColor(255 - pHp_, 0, 0);
+		}
+		DxLib::DrawBox(lpSceneMng.ScreenSize.x/2 - 299, 1, lpSceneMng.ScreenSize.x/2 - 300 + 255 -(255-pHp_)-1, 29, c, true);
+		DxLib::DrawFormatString(1000, 20, 0x000000, "%d", pHp_);
 	}
 }
 

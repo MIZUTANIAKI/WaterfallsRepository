@@ -39,7 +39,7 @@ Enemy::Enemy()
 
 	nbullet1.reset(new Bullet(UNIT_ID::PLAYER));
 	econ_++;
-	hp_ = 3*60;
+	hp_ = 30;
 	drawF_ = true;
 }
 
@@ -58,13 +58,13 @@ void Enemy::Updata(void)
 	lpobjlMng.ObjDraw(unitID_, eID_);
 	if (drawF_ == false)
 	{
-		pos_.y--;
-		if (pos_.y < 5000)
+		pos_.y-=3;
+		if (pos_.y < -1000)
 		{
-			hp_ = 3*60;
+			hp_ = 30;
 			drawF_ = true;
 			pos_ = VGet(rand()%10000-5000.0f, 0.0f, 10000.0f);	//敵の座標初期化
-			state_ == STATE_ID::ACTIVE;
+			state_ = STATE_ID::ACTIVE;
 		}
 	}
 }
@@ -86,7 +86,61 @@ void Enemy::Updata(VECTOR pos)
 	else if (state_ == STATE_ID::ACTIVE)
 	{
 		ppos_ = pos;
-	
+		if (CheckHitKey(KEY_INPUT_F))
+		{
+			if (!fKeyold_)
+			{
+				if (!flag_)
+				{
+					flag_ = true;
+				}
+				else
+				{
+					flag_ = false;
+					flagcon_ = 10;
+				}
+			}
+		}
+
+		if (!flag_)
+		{
+			// １秒たっているか
+			if (GetNowCount() - oneCount_ > 1000)
+			{
+				flagcon_--;
+				oneCount_ = GetNowCount();
+
+				if (rand() % 500 == 0)
+				{
+					state_ = STATE_ID::ESCAPE;
+				}
+			}
+		}
+
+		if (lpobjlMng.ObjCollHit(pos_, unitID_))
+		{
+   			hp_--;
+		}
+		if (hp_ <= 0)
+		{
+			state_ = STATE_ID::STAY;
+ 			drawF_ = false;
+		}
+		if (pos_.z < -5000)
+		{
+			hp_ = 30;
+			drawF_ = true;
+			pos_ = VGet(rand() % 10000 - 5000.0f, 0.0f, 10000.0f);	//敵の座標初期化
+			state_ = STATE_ID::ACTIVE;
+		}
+		MoveControl();
+
+		nbullet1->Run();
+	}
+	else if (state_ == STATE_ID::ESCAPE)
+	{
+		ppos_ = pos;
+
 		if (CheckHitKey(KEY_INPUT_F))
 		{
 			if (!fKeyold_)
@@ -115,21 +169,24 @@ void Enemy::Updata(VECTOR pos)
 
 		if (lpobjlMng.ObjCollHit(pos_, unitID_))
 		{
-   			hp_--;
+			hp_--;
 		}
 		if (hp_ <= 0)
 		{
 			state_ = STATE_ID::STAY;
- 			drawF_ = false;
+			drawF_ = false;
+		}
+		if (pos_.z < -5000)
+		{
+			hp_ = 30;
+			drawF_ = true;
+			pos_ = VGet(rand() % 10000 - 5000.0f, 0.0f, 10000.0f);	//敵の座標初期化
+			state_ = STATE_ID::ACTIVE;
 		}
 		MoveControl();
 
 		nbullet1->Run();
 	}
-	else if (state_ == STATE_ID::ESCAPE)
-	{
-	}
-	
 }
 
 void Enemy::MoveControl(void)
@@ -142,54 +199,54 @@ void Enemy::MoveControl(void)
 	}
 	else if(state_ == STATE_ID::ESCAPE)
 	{
-		//VECTOR tmpcrossvec = VCross(VSub(pos_, movePos_), VSub(pos_, ppos_));
-	
-		//if (tmpcrossvec.x == 0.0f && tmpcrossvec.z == 0.0f)
-		//{
-		//	LorR_ = LORR::NON;
-		//}
-		//if (!signbit(tmpcrossvec.x))
-		//{
-		//	//プラスの場合は、右に
-		//	LorR_ = LORR::RIGHT;
-		//	moveYAngle_ += 0.1f;
-		//	if (moveYAngle_ >= 180.0f)
-		//	{
-		//		moveYAngle_ -= 360.0f;
-		//	}
-		//}
 
-		//if(!signbit(tmpcrossvec.z))
-		//{
-		//	//プラスの場合は、右に
-		//	LorR_ = LORR::RIGHT;
-		//	moveYAngle_ += 0.1f;
-		//	if (moveYAngle_ >= 180.0f)
-		//	{
-		//		moveYAngle_ -= 360.0f;
-		//	}
-		//}
-		//
-		//if (signbit(tmpcrossvec.x))
-		//{
-		//	//マイナスの場合は左に
-		//	LorR_ = LORR::LEFT;
-		//	moveYAngle_ -= 0.1f;
-		//	if (moveYAngle_ <= -180.0f)
-		//	{
-		//		moveYAngle_ += 360.0f;
-		//	}
-		//}
-		//if(signbit(tmpcrossvec.z))
-		//{
-		//	//マイナスの場合は左に
-		//	LorR_ = LORR::LEFT;
-		//	moveYAngle_ -= 0.1f;
-		//	if (moveYAngle_ <= -180.0f)
-		//	{
-		//		moveYAngle_ += 360.0f;
-		//	}
-		//}
+		VECTOR tmpcrossvec = VCross(VSub(pos_, movePos_), VSub(pos_, ppos_));
+		if (tmpcrossvec.x == 0.0f && tmpcrossvec.z == 0.0f)
+		{
+			LorR_ = LORR::NON;
+		}
+		if (!signbit(tmpcrossvec.x))
+		{
+			//プラスの場合は、右に
+			LorR_ = LORR::RIGHT;
+			moveYAngle_ += 0.1f;
+			if (moveYAngle_ >= 180.0f)
+			{
+				moveYAngle_ -= 360.0f;
+			}
+		}
+
+		if(!signbit(tmpcrossvec.z))
+		{
+			//プラスの場合は、右に
+			LorR_ = LORR::RIGHT;
+			moveYAngle_ += 0.1f;
+			if (moveYAngle_ >= 180.0f)
+			{
+				moveYAngle_ -= 360.0f;
+			}
+		}
+		
+		if (signbit(tmpcrossvec.x))
+		{
+			//マイナスの場合は左に
+			LorR_ = LORR::LEFT;
+			moveYAngle_ -= 0.1f;
+			if (moveYAngle_ <= -180.0f)
+			{
+				moveYAngle_ += 360.0f;
+			}
+		}
+		if(signbit(tmpcrossvec.z))
+		{
+			//マイナスの場合は左に
+			LorR_ = LORR::LEFT;
+			moveYAngle_ -= 0.1f;
+			if (moveYAngle_ <= -180.0f)
+			{
+				moveYAngle_ += 360.0f;
+			}
+		}
 		
 		/*if (LorR_ == LORR::RIGHT)
 		{
@@ -282,9 +339,10 @@ void Enemy::MoveControl(void)
 	tempMoveVec.x = moveVec_.x * temp2 - moveVec_.z * temp1;
 	tempMoveVec.y = 0.0f;
 	tempMoveVec.z = moveVec_.x * temp1 + moveVec_.z * temp2;
-
+	moveVec_ = tempMoveVec;
+	pos_ = VAdd(pos_, moveVec_);/*
+	pos_ = VAdd(pos_, tempMoveVec);*/
 	moveVec_ = VGet(0.0f, 0.0f, 0.0f);
-	pos_ = VAdd(pos_, tempMoveVec);
 
 	float tmptmpfl = ((pos_.x - pos_.x)*(pos_.x - pos_.x)+((pos_.z - pos_.z)*(pos_.z - pos_.z)));
 

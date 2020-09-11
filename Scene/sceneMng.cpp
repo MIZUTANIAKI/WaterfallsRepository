@@ -13,7 +13,7 @@ SceneMng* SceneMng::sInstance = nullptr;
 
 SceneMng::SceneMng() :ScreenSize{1920,1080}
 {
-	SetWindowText("Ç§ÇßÅ[ÇΩÅ[Ç”ÇßÅ[ÇÈ");
+	SetWindowText("LineBattleoftheShip");
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 	SetUseZBuffer3D(TRUE);
@@ -52,6 +52,9 @@ SceneMng::SceneMng() :ScreenSize{1920,1080}
 	lpSudlMng;
 
 	efcS_.reset(new EffekseerCtl());
+
+	SetFogEnable(TRUE); 
+	SetFogStartEnd(1500.0f, 40000.0f);
 }
 
 SceneMng::~SceneMng()
@@ -141,19 +144,23 @@ void SceneMng::Run(void)
 	lpSudlMng.AddBGM(std::string("sound/bgm_49.ogg"));
 	while (ProcessMessage() == 0 && systemEnd == false)
 	{
-		//SetLightDirectionHandle(lightHandle_, campos_);
-		SetLightPositionHandle(lightHandle_, campos_);
-		lpobjlMng.ReSetD();
-		lpImglMng.ResetD();
-		bulletList_.clear();
-		lpSudlMng.ResetD();
+		for (int i = 0; i < 2; i++)
+		{
+			//SetLightDirectionHandle(lightHandle_, campos_);
+			SetLightPositionHandle(lightHandle_, campos_);
+			lpobjlMng.ReSetD();
+			lpImglMng.ResetD();
+			bulletList_.clear();
+			lpSudlMng.ResetD();
 
-		Effekseer_Sync3DSetting();
+			Effekseer_Sync3DSetting();
 
-		efcS_->Updata();
+			efcS_->Updata();
+		
+			LpPadMng.Run();
+			activeScene_ = (*activeScene_).Update(std::move(activeScene_));
+		}
 
-		LpPadMng.Run();
-		activeScene_ = (*activeScene_).Update(std::move(activeScene_));
 		lpSudlMng.Run();
 		Draw();
 		fcon_++;

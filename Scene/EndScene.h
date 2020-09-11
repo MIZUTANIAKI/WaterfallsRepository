@@ -5,25 +5,16 @@
 #include<memory>
 #include "../camera.h"
 
-
-class GameScene :
+class EndScene :
 	public BaseScene
 {
 public:
 	UNBS Update(UNBS own) override;		//シーンを、更新する。
-	GameScene();
-	~GameScene();
+	EndScene();
+	~EndScene();
 	void Draw(void)override;
 	SCN_ID GetSCNID_(void)override;
 private:
-
-	int pHp_;
-
-	int lrSF_;
 	float cpy_;
-	int gcon_;
-	Camera cam;											//カメラクラス格納
-	std::vector<std::pair<shardObj, UNIT_ID>> _objList;	//アライブになっている存在を管理する。
-	VECTOR ppos;										//プレイヤー座標渡し用
 };
 

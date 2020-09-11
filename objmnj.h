@@ -63,7 +63,7 @@ private:
 	std::vector<int> _drawList;						//描画するものを溜めておくキュー
 	std::vector<int> _drawListnex;					//描画するものを溜めておくキュー（すける）
 
-	int		issobj;				//ﾌﾟﾚｲﾔモデル格納用
+	int		issobj;					//ﾌﾟﾚｲﾔモデル格納用
 	int		playerobj;				//ﾌﾟﾚｲﾔモデル格納用
 	int		playerobjsub[BULLETMAX];//ﾌﾟﾚｲﾔモデル格納用
 	int		phitobj;				//ﾌﾟﾚｲﾔ当たり判定モデル格納用
@@ -84,7 +84,7 @@ private:
 	UNIT_ID	player;					//ﾌﾟﾚｲﾔモデル格納用
 	UNIT_ID	enemy;					//敵モデル格納用
 	UNIT_ID	bullet[BULLETMAX];		//弾
-
+		
 	Objmnj();
 	~Objmnj();
 };

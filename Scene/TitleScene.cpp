@@ -7,6 +7,7 @@
 #include "Vector2.h"
 #include "ImgMnj.h"
 #include "MenuScene.h"
+#include "EndScene.h"
 
 UNBS TitleScene::Update(UNBS own)
 {
@@ -18,6 +19,10 @@ UNBS TitleScene::Update(UNBS own)
     if (CheckHitKey(KEY_INPUT_SPACE)||LpPadMng.GetPad().Buttons[0])
     {
         return std::make_unique<GameScene>();
+    }
+    if (CheckHitKey(KEY_INPUT_ESCAPE))
+    {
+        return std::make_unique<EndScene>();
     }
 
     lpobjlMng.ObjRotation(UNIT_ID::PLAYER, -90, 0);
@@ -54,8 +59,10 @@ TitleScene::TitleScene()
 {
     scnID_ = SCN_TITLE;
     cpy_ = 200.0f;
-
+    SetWindowText("LineBattleoftheShip::ƒ^ƒCƒgƒ‹");
     lpSceneMng.SetEffect(EffectName::testef, VGet(500.0f, 100.0f, -250.0f));
+
+    SetFogColor(255, 255, 50);
 }
 
 TitleScene::~TitleScene()

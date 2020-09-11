@@ -4,22 +4,23 @@
 
 Objmnj* Objmnj::sInstance = nullptr;
 
-
 void Objmnj::DrawNaw(void)
 {
 	//í èÌï®ÇÇ∑Ç◊Çƒï`âÊå„ÅAÉKÉâÉXÇ»Ç«ÇÃìßÇØÇΩÇ¢Ç‡ÇÃÇï`âÊÇ∑ÇÈ
 	//àÍÇ¬Ç∏Ç¬ï`âÊ
+	MV1SetSemiTransDrawMode(DX_SEMITRANSDRAWMODE_ALWAYS);
 	for (auto dQue : _drawList)
 	{
 		DxLib::MV1DrawModel(dQue);
 	}
+	MV1SetSemiTransDrawMode(DX_SEMITRANSDRAWMODE_SEMITRANS_ONLY);
 	//Ç∑ÇØÇÈÇÃÇï`âÊ
-	DxLib::SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
+	DxLib::SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 	for (auto dQue : _drawListnex)
 	{
 		DxLib::MV1DrawModel(dQue);
 	}
-	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 180);
+	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 }
 
@@ -167,18 +168,22 @@ Objmnj::Objmnj()
 	}
 	phitobj = DxLib::MV1LoadModel("mv/pHIT.mv1");
 	issobj = DxLib::MV1LoadModel("mv/iss.mv1");
-	DxLib::MV1SetPosition(issobj, VGet(0.0f, 0.0f, 0.0f));
+	DxLib::MV1SetPosition(issobj, VGet(0.0f, 0.0f, -5000.0f));
 	DxLib::MV1SetupCollInfo(phitobj, -1, 8, 8, 8);
 	ppos = VGet(0.0f, 0.0f, 0.0f);
 	pvec = VGet(0.0f, 0.0f, 0.0f);
+	//int FrNum = MV1GetFrameNum(issobj);
 
+	//for (int i = 0; i < FrNum; i++)
+	//{
+	//	MV1SetFrameOpacityRate(issobj, i, 0.5f);
+	//}
 	skyobj = DxLib::MV1LoadModel("mv/sora.mv1");
 
 	//enemyobj = MV1LoadModel(L"mv/vicShip.mv1");
 	enemyobj = DxLib::MV1LoadModel("mv/vicShip.mv1");
 	ehitobj = DxLib::MV1LoadModel("mv/pHIT.mv1");
 	DxLib::MV1SetupCollInfo(ehitobj, -1, 8, 8, 8);
-
 
 	bulletobj = DxLib::MV1LoadModel("mv/bullets.mv1");
 	for (int i = 0; i < BULLETMAX; i++)
@@ -192,9 +197,7 @@ Objmnj::Objmnj()
 		DxLib::MV1SetupCollInfo(bulletmodel[i], -1, 1, 1, 1);
 		bpos[i] = VGet(0.0f, 0.0f, 0.0f);
 		bvec[i] = VGet(0.0f, 0.0f, 0.0f);
-	}	
-
-
+	}
 
 	DxLib::MV1SetScale(skyobj, VGet(2.0f, 2.0f, 2.0f));
 
@@ -226,10 +229,10 @@ bool Objmnj::ObjCollHit(VECTOR pos, UNIT_ID id)
 		for (int i = 0; i < BULLETMAX; i++)
 		{
 
-			double tf = ((epos[i].x - pos.x) * (epos[i].x - pos.x)) + ((epos[i].y - pos.y) * (epos[i].y - pos.y)) + ((epos[i].z - pos.z) * (epos[i].z - pos.z));
+			double tf = (static_cast<double>(static_cast<double>(epos[i].x) - static_cast<double>(pos.x)) * static_cast<double>(static_cast<double>(epos[i].x) - static_cast<double>(pos.x))) + (static_cast<double>(static_cast<double>(epos[i].y) - static_cast<double>(pos.y)) * static_cast<double>(static_cast<double>(epos[i].y) - static_cast<double>(pos.y))) + (static_cast<double>(epos[i].z) - static_cast<double>(pos.z) * static_cast<double>(static_cast<double>(epos[i].z) - static_cast<double>(pos.z)));
 
 
-			double es = 45 * 5, bs = 36 * 14;
+			double es = static_cast<double>(static_cast <double>(45) * static_cast <double>(5)), bs = static_cast<double>(static_cast <double>(36) * static_cast<double>(14));
 
 			if ((es + bs) >= sqrt(tf))
 			{
@@ -287,9 +290,12 @@ bool Objmnj::ObjCollHit(VECTOR pos, UNIT_ID id)
 		for (int i = 0; i < BULLETMAX; i++)
 		{
 
-			double tf = ((pos.x - bpos[i].x) * (pos.x - bpos[i].x)) + ((pos.y - bpos[i].y) * (pos.y - bpos[i].y)) + ((pos.z - bpos[i].z) * (pos.z - bpos[i].z));
+			double tf = ((
+				
+				
+				pos.x - bpos[i].x) * (pos.x - bpos[i].x)) + ((pos.y - bpos[i].y) * (pos.y - bpos[i].y)) + ((pos.z - bpos[i].z) * (pos.z - bpos[i].z));
 
-			double es = 45 * 5, bs = 36 * 14;
+			double es = 45 * 5, bs = 36 * 13;
 
 			if ((es + bs) >= sqrt(tf))
 			{

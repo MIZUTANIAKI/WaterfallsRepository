@@ -19,7 +19,6 @@ int& EffekseerCtl::GetEffect(std::string fname)
 	{
 		std::string text = fname + ".efk";
 		auto a = LoadEffekseerEffect(text.c_str(), 100.0f);
-		
 		effectData_.emplace(fname, std::move(a));
 	}
 	return effectData_[fname];
