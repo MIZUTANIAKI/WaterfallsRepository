@@ -287,7 +287,7 @@ bool Objmnj::ObjCollHit(VECTOR pos, UNIT_ID id)
 		for (int i = 0; i < BULLETMAX; i++)
 		{
 
-			double tf = ((pos.x - pos.x) * (pos.x - bpos[i].x)) + ((pos.y - bpos[i].y) * (pos.y - bpos[i].y)) + ((pos.z - bpos[i].z) * (pos.z - bpos[i].z));
+			double tf = ((pos.x - bpos[i].x) * (pos.x - bpos[i].x)) + ((pos.y - bpos[i].y) * (pos.y - bpos[i].y)) + ((pos.z - bpos[i].z) * (pos.z - bpos[i].z));
 
 			double es = 45 * 5, bs = 36 * 14;
 
