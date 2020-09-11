@@ -2,14 +2,13 @@
 #include "obj.h"
 #include "Bullet.h"
 
-// 移動速度
-#define MOVESPEED					10.0f
 
-// 操作軸のﾌﾟﾚｲﾔ本体とのの距離
-#define MOVE_DISTANCE		1200.0f
+/*	
+	前回の二人での制作では、プレイヤーの後ろにカメラを置いて、カメラからプレイヤーをみて、移動方向を決めてるみたいだった。
+	なので、必要のないと断言できた要素を取り外し、カメラと別々に動作させてみた。
+*/
 
-// 角度変化速度
-#define PLAYER_ANGLE_SPEED			0.2f		
+	
 
 class Player :
 	public Obj
@@ -20,33 +19,48 @@ public:
 
 	UNIT_ID GetUnitID(void) override
 	{
-		return _unitID;
+		return unitID_;
 	};
 
 	VECTOR GetPos(void) override
 	{
-		return _pos;
+		return pos_;
 	};
 
 	void Updata(void) override;
 
+	int GetSLR(void);
+
 private:
 	void MoveControl(void);	//ﾌﾟﾚｲﾔ移動処理
-	int kazi;				//舵を切る
+	int kazi_;				//舵を切る
+
+	int shotLR_; //0==L 1==R
 			
-	float  moveYAngle;			//操作軸の横の角度
-	float  moveXAngle;			//操作軸の横の角度
-	VECTOR movePos;				//操作軸の位置
+	float  moveYAngle_;			//操作軸の横の角度
+	float  moveXAngle_;			//操作軸の横の角度
+	VECTOR movePos_;				//操作軸の位置
+
+	std::vector<int> pMcon_;
+	std::vector<float> pMAng_;
+	std::vector < std::pair<VECTOR, VECTOR> > pMmm_;
 	
-	//VECTOR _pos;				//ﾌﾟﾚｲﾔ座標
-	VECTOR _tmppPos;
-	VECTOR moveVec;				//ﾌﾟﾚｲﾔの移動量保存
+	int bcoon_;
 
-	bool	_flag;				//true＝帆を張るfalse＝帆をたたむ
-	bool	fKeyold;			//Fが前のフレームに押されているか
-	int		_flagcon;			//帆のカウント
+	//VECTOR pos_;				//ﾌﾟﾚｲﾔ座標
+	VECTOR tmppPos_;
+	VECTOR moveVec_;				//ﾌﾟﾚｲﾔの移動量保存
 
-	int		oneCount;			//一秒計測用
+	bool	flag_;				//true＝帆を張るfalse＝帆をたたむ
+	bool	fKeyold_;			//Fが前のフレームに押されているか
+	int		flagcon_;			//帆のカウント
 
-	Bullet pbullet;				//ﾌﾟﾚｲﾔ弾格納用
+	int		oneCount_;			//一秒計測用
+
+	std::unique_ptr<Bullet> pbullet_;				//ﾌﾟﾚｲﾔ弾格納用
+
+	friend Bullet;
+
+	float bltAngl_;
 };
+

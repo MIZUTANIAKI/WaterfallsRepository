@@ -2,14 +2,7 @@
 #include "Obj.h"
 #include "Bullet.h"
 
-// 移動速度
-#define MOVESPEED					10.0f
-
-// 操作軸の自分とのの距離
-#define MOVE_DISTANCE		1200.0f
-
-// 角度変化速度
-#define PLAYER_ANGLE_SPEED			0.2f		
+	
 
 enum class STATE_ID			//それぞれの立場
 {
@@ -35,11 +28,11 @@ public:
 
 	UNIT_ID GetUnitID(void) override
 	{
-		return _unitID;
+		return unitID_;
 	}
 	VECTOR GetPos(void) override
 	{
-		return _pos;
+		return pos_;
 	}
 
 	void Updata(void) override;	//敵の更新用
@@ -47,27 +40,36 @@ public:
 	void Updata(VECTOR pos) override;	//敵の更新2プレイヤー情報取得用
 
 private:
-	STATE_ID _State;			//敵の状態
+	STATE_ID state_;			//敵の状態
 
-	LORR _LorR;					//敵から見てプレイヤーはどっちにいるのか
-	VECTOR _ppos;				//プレイヤー座標
+	int hp_;
+	bool drawF_;
+
+	LORR LorR_;					//敵から見てプレイヤーはどっちにいるのか
+	VECTOR ppos_;				//プレイヤー座標
 
 	void	MoveControl(void);	//自機の移動処理
 
-	float	moveYAngle;			//操作軸の横の角度
-	float	moveXAngle;			//操作軸の横の角度
-	VECTOR	movePos;			//操作軸の位置
+	float	moveYAngle_;			//操作軸の横の角度
+	float	moveXAngle_;			//操作軸の横の角度
+	VECTOR	movePos_;			//操作軸の位置
 
-	//VECTOR	_pos;				//座標
-	VECTOR	moveVec;			//移動量保存
+	//VECTOR	pos_;				//座標
+	VECTOR	moveVec_;			//移動量保存
 
-	bool	_flag;				//true＝帆を張るfalse＝帆をたたむ
-	bool	fKeyold;			//敵はたたまないようにしようかな
-	int		_flagcon;			//旗のカウント
+	bool	flag_;				//true＝帆を張るfalse＝帆をたたむ
+	bool	fKeyold_;			//敵はたたまないようにしようかな
+	int		flagcon_;			//旗のカウント
 
-	int		oneCount;			//一秒計測用
+	int		oneCount_;			//一秒計測用
 
-	Bullet	nbullet1;			//敵の弾呼び出しよう
+	std::unique_ptr<Bullet>	nbullet1;			//敵の弾呼び出しよう
+
+	static int econ_;
+
+	int eID_;
+
+	friend Bullet;
 
 };
 

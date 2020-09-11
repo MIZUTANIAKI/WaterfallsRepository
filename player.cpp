@@ -4,28 +4,39 @@
 #include "Bullet.h"
 #include "player.h"
 #include "objmnj.h"
+#include "PadMng.h"
 
 Player::Player()
 {
-	_unitID=UNIT_ID::PLAYER;
-	_pos = VGet(0.0f, 0.0f, 0.0f);	//ﾌﾟﾚｲﾔ座標初期化
+	unitID_ = UNIT_ID::PLAYER;
+	pos_ = VGet(0.0f, 0.0f, 0.0f);	//ﾌﾟﾚｲﾔ座標初期化
 
-	moveVec = VGet(0.0f, 0.0f, 0.0f);
-	movePos = VGet(0.0f, 5000.0f, 0.0f);	//操作軸の座標初期化
-	moveYAngle = 0.0f;	//操作軸の角度初期化
-	moveXAngle = DX_PI_F;
+	moveVec_ = VGet(0.0f, 0.0f, 1.0f);
+	movePos_ = VGet(0.0f, 0.0f, 0.0f);	//操作軸の座標初期化
+	moveYAngle_ = 0.0f;	//操作軸の角度初期化
+	moveXAngle_ = DX_PI_F;
+	bltAngl_ = 0.0f;
+	kazi_ = NULL;
+	flag_ = true;
+	flagcon_ = 10;
+	fKeyold_ = false;
+	oneCount_ = GetNowCount();
+	tmppPos_ = pos_;
 
-	kazi = NULL;
-	_flag = true;
-	_flagcon = 10;
-	fKeyold = false;
-	oneCount = GetNowCount();
-	_tmppPos = _pos;
+	pbullet_.reset(new Bullet(UNIT_ID::PLAYER));
 
 	//ﾌﾟﾚｲﾔの向きを変更
-	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
+	lpobjlMng.ObjRotation(unitID_, -moveYAngle_, 0);
 	//座標設定
-	lpobjlMng.Setobjpos(_pos, moveVec, _unitID, 0);
+	lpobjlMng.Setobjpos(pos_, moveVec_, unitID_, 0);
+	pMAng_.emplace_back(moveYAngle_);
+	pMmm_.emplace_back(pos_, moveVec_);
+	for (int i = 0; i < 3; i++)
+	{
+		pMcon_.emplace_back(0);
+	}
+	bcoon_ = 0;
+	shotLR_ = 0;
 }
 
 Player::~Player()
@@ -36,178 +47,216 @@ void Player::Updata(void)
 {
 	if (CheckHitKey(KEY_INPUT_F))
 	{
-		if (!fKeyold)
+		if (!fKeyold_)
 		{
-			if (!_flag)
+			if (!flag_)
 			{
-				_flag = true;
+				flag_ = true;
 			}
 			else
 			{
-				_flag = false;
-				_flagcon = 10;
+				flag_ = false;
+				flagcon_ = 10;
 			}
 		}
 	}
+	if (LpPadMng.GetPad().Buttons[4] && LpPadMng.GetPad().Buttons[5])
+	{
+		//両方押されている場合は無視する。
+	}
+	else
+	{
+		if (LpPadMng.GetPad().Buttons[4])
+		{
+			shotLR_ = 1;
+		}
+		if (LpPadMng.GetPad().Buttons[5])
+		{
+			shotLR_ = 0;
+		}
 
-	if (!_flag)
+	}
+	if (!flag_)
 	{
 		// １秒たっているか
-		if (GetNowCount() - oneCount > 1000)
+		if (GetNowCount() - oneCount_ > 1000)
 		{
-			_flagcon--;
-			oneCount = GetNowCount();
+			flagcon_--;
+			oneCount_ = GetNowCount();
 		}
 	}
 	MoveControl();
-	pbullet.Run();
+	pbullet_->Run();
+
+	pMAng_.emplace_back(moveYAngle_);
+	pMmm_.emplace_back(pos_, moveVec_);
 
 	//ﾌﾟﾚｲﾔの向きを変更
-	lpobjlMng.ObjRotation(_unitID, -moveYAngle, 0);
+	lpobjlMng.ObjRotation(unitID_, -moveYAngle_, 0);
+	lpobjlMng.ObjRotation(unitID_, -pMAng_[pMcon_[1]], 1);
+	lpobjlMng.ObjRotation(unitID_, -pMAng_[pMcon_[2]], 2);
 	//座標設定
-	lpobjlMng.Setobjpos(_pos, moveVec, _unitID, 0);
+	lpobjlMng.Setobjpos(pos_, moveVec_, unitID_, 0);
+	lpobjlMng.Setobjpos(pMmm_[pMcon_[1]].first, pMmm_[pMcon_[1]].second, unitID_, 1);
+	lpobjlMng.Setobjpos(pMmm_[pMcon_[2]].first, pMmm_[pMcon_[2]].second, unitID_, 2);
 
 	//描画に投げる
-	lpobjlMng.ObjDraw(_unitID, 0);
+	lpobjlMng.ObjDraw(unitID_, 0);
+	lpobjlMng.ObjDraw(unitID_, 1);
+	lpobjlMng.ObjDraw(unitID_, 2);
 
-	fKeyold = CheckHitKey(KEY_INPUT_F);
+	fKeyold_ = CheckHitKey(KEY_INPUT_F);
 
-	VECTOR tmpvec = VNorm(VSub(_pos, movePos));
-	tmpvec.x *= 2500.0f;
-	tmpvec.z *= 2500.0f;
+	VECTOR tmpvec = VNorm(VSub(pos_, movePos_));
+	tmpvec.x *= 400.0f;
+	tmpvec.z *= 400.0f;
 	tmpvec.y = 0;
-	_tmppPos = _pos;
-	_pos = VAdd(_pos, tmpvec);
+	tmppPos_ = pos_;
+	pos_ = VAdd(pos_, tmpvec);
+	if (pMcon_[0] >= 60*3)
+	{
+		if (pMcon_[1] >= 60*3)
+		{
+			pMcon_[2]++;
+		}
+		pMcon_[1]++;
+	}
+	pMcon_[0]++;
+}
+
+int Player::GetSLR(void)
+{
+	return shotLR_;
 }
 
 void Player::MoveControl(void)
 {
-	_pos = _tmppPos;
+	pos_ = tmppPos_;
 	//操作
-	if (CheckHitKey(KEY_INPUT_LEFT))
+	if (CheckHitKey(KEY_INPUT_A) || LpPadMng.GetPad().X < -100)
 	{
 		if (lpSceneMng.GetFcon() % 30 == 0)
 		{
-			kazi++;
-			if (kazi > 10)
+			kazi_++;
+			if (kazi_ > 10)
 			{
-				kazi = 10;
+				kazi_ = 10;
 			}
 		}
 	}
-	else if (CheckHitKey(KEY_INPUT_RIGHT))
+	else if (CheckHitKey(KEY_INPUT_D) || LpPadMng.GetPad().X > 100)
 	{
 
 		if (lpSceneMng.GetFcon() % 30 == 0)
 		{
-			kazi--;
-			if (kazi < -10)
+			kazi_--;
+			if (kazi_ < -10)
 			{
-				kazi = -10;
+				kazi_ = -10;
 			}
 		}
 	}
 	else
 	{
-		if (kazi != NULL)
+		if (kazi_ != NULL)
 		{
-			if (kazi > 0)
+			if (kazi_ > 0)
 			{
-				kazi -= 2;
-				if (kazi < 0)
+				kazi_ -= 2;
+				if (kazi_ < 0)
 				{
-					kazi = NULL;
+					kazi_ = NULL;
 				}
 			}
-			else if (kazi < 0)
+			else if (kazi_ < 0)
 			{
-				kazi += 2;
-				if (kazi > 0)
+				kazi_ += 2;
+				if (kazi_ > 0)
 				{
-					kazi = NULL;
+					kazi_ = NULL;
 				}
 			}
 			else
 			{
-				kazi = NULL;
+				kazi_ = NULL;
 			}
 		}
 	}
-	if (kazi > 2)
+	if (kazi_ > 2)
 	{
-		if (kazi > 6)
+		if (kazi_ < 6)
 		{
-			moveYAngle += 0.06f;
-			if (moveYAngle >= 180.0f)
+			moveYAngle_ += 0.06f;
+			if (moveYAngle_ >= 180.0f)
 			{
-				moveYAngle -= 360.0f;
+				moveYAngle_ -= 360.0f;
 			}
 		}
-		else if (kazi < 6)
+		else if (kazi_ < 8)
 		{
-			moveYAngle += 0.08f;
-			if (moveYAngle >= 180.0f)
+			moveYAngle_ += 0.08f;
+			if (moveYAngle_ >= 180.0f)
 			{
-				moveYAngle -= 360.0f;
+				moveYAngle_ -= 360.0f;
 			}
 		}
-		else if (kazi <= 10)
+		else if (kazi_ <= 10)
 		{
-			moveYAngle += 0.12f;
-			if (moveYAngle >= 180.0f)
+			moveYAngle_ += 0.12f;
+			if (moveYAngle_ >= 180.0f)
 			{
-				moveYAngle -= 360.0f;
+				moveYAngle_ -= 360.0f;
 			}
 		}
 	}
-	if (kazi < -2)
+	if (kazi_ < -2)
 	{
-		if (kazi < -6)
+		if (kazi_ > -6)
 		{
-			moveYAngle -= 0.06f;
-			if (moveYAngle <= -180.0f)
+			moveYAngle_ -= 0.06f;
+			if (moveYAngle_ <= -180.0f)
 			{
-				moveYAngle += 360.0f;
+				moveYAngle_ += 360.0f;
 			}
 		}
-		else if (kazi > -6)
+		else if (kazi_ > -8)
 		{
-			moveYAngle -= 0.08f;
-			if (moveYAngle <= -180.0f)
+			moveYAngle_ -= 0.08f;
+			if (moveYAngle_ <= -180.0f)
 			{
-				moveYAngle += 360.0f;
+				moveYAngle_ += 360.0f;
 			}
 		}
-		else if (kazi >= -10)
+		else if (kazi_ >= -10)
 		{
-			moveYAngle -= 0.12f;
-			if (moveYAngle <= -180.0f)
+			moveYAngle_ -= 0.12f;
+			if (moveYAngle_ <= -180.0f)
 			{
-				moveYAngle += 360.0f;
+				moveYAngle_ += 360.0f;
 			}
 		}
 	}
-	if (_flag)
+	if (flag_)
 	{
-		moveVec.z += 5.0f;
+		moveVec_.z += 5.0f;
 	}
 	else
 	{
-		if (_flagcon >= 8)
+		if (flagcon_ >= 8)
 		{
-			moveVec.z += 4.0f;
+			moveVec_.z += 4.0f;
 		}
-		else if (_flagcon >= 6)
+		else if (flagcon_ >= 6)
 		{
-			moveVec.z += 3.0f;
+			moveVec_.z += 3.0f;
 		}
-		else if (_flagcon >= 4)
+		else if (flagcon_ >= 4)
 		{
-			moveVec.z += 2.0f;
+			moveVec_.z += 2.0f;
 		}
 		else
 		{
-			moveVec.z += 1.0f;
+			moveVec_.z += 1.0f;
 		}
 	}
 
@@ -220,9 +269,8 @@ void Player::MoveControl(void)
 	float  temp1;
 	float  temp2;
 
-	lpobjlMng.ObjCollHit(_pos, &moveVec, _unitID);
 
-	tempMovePos = _pos;	//操作軸の位置をﾌﾟﾚｲﾔ座標で初期化
+	tempMovePos = pos_;	//操作軸の位置をﾌﾟﾚｲﾔ座標で初期化
 
 	//操作軸の高さの角度を求める
 	tempf1 = static_cast<float>(sin(1.0f / 180.0f * static_cast<double>(DX_PI_F)));
@@ -232,27 +280,63 @@ void Player::MoveControl(void)
 	tempPos1.z = -tempf2 * MOVE_DISTANCE;
 
 	//操作軸の横の角度を求める
-	tempf1 = static_cast<float>(sin(moveYAngle / 180.0f * static_cast<double>(DX_PI_F)));
-	tempf2 = static_cast<float>(cos(moveYAngle / 180.0f * static_cast<double>(DX_PI_F)));
+	tempf1 = static_cast<float>(sin(moveYAngle_ / 180.0f * static_cast<double>(DX_PI_F)));
+	tempf2 = static_cast<float>(cos(moveYAngle_ / 180.0f * static_cast<double>(DX_PI_F)));
 	tempPos2.x = tempf2 * tempPos1.x - tempf1 * tempPos1.z;
 	tempPos2.y = tempPos1.y;
 	tempPos2.z = tempf1 * tempPos1.x + tempf2 * tempPos1.z;
-	movePos = VAdd(tempPos2, tempMovePos);
-	temp1 = static_cast<float>(sin(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
-	temp2 = static_cast<float>(cos(static_cast<double>(moveYAngle / 180.0f)* DX_PI_F));
-	tempMoveVec.x = moveVec.x * temp2 - moveVec.z * temp1;
+	movePos_ = VAdd(tempPos2, tempMovePos);
+	temp1 = static_cast<float>(sin(static_cast<double>(moveYAngle_ / 180.0f)* DX_PI_F));
+	temp2 = static_cast<float>(cos(static_cast<double>(moveYAngle_ / 180.0f)* DX_PI_F));
+	tempMoveVec.x = moveVec_.x * temp2 - moveVec_.z * temp1;
 	tempMoveVec.y = 0.0f;
-	tempMoveVec.z = moveVec.x * temp1 + moveVec.z * temp2;
-	moveVec = tempMoveVec;
-	_pos = VAdd(_pos, moveVec);
-	moveVec = VGet(0.0f, 0.0f, 0.0f);
+	tempMoveVec.z = moveVec_.x * temp1 + moveVec_.z * temp2;
+	moveVec_ = tempMoveVec;
+	pos_ = VAdd(pos_, moveVec_);
+	moveVec_ = VGet(0.0f, 0.0f, 0.0f);
 
-	if (CheckHitKey(KEY_INPUT_SPACE))
+	if (VNorm(VSub(lpSceneMng.campos_, VAdd(VNorm(VSub(pos_, movePos_)), pos_))).x > bltAngl_)
 	{
-		VECTOR tmpvec1 = _pos, tmpvec2 = movePos;
-		tmpvec1.y = 0.0f;
-		tmpvec2.y = 0.0f;
-		pbullet.SetBullet(VAdd(_pos, VGet(0.0f, 100.0f, 0.0f)), VNorm(VSub(tmpvec1, tmpvec2)));
+		bltAngl_ += 0.5;
+	}
+	else if (VNorm(VSub(lpSceneMng.campos_, VAdd(VNorm(VSub(pos_, movePos_)), pos_))).x < bltAngl_)
+	{
+		bltAngl_ -= 0.5;
+	}
+	if (pMcon_[2] != 0)
+	{
+		if ((CheckHitKey(KEY_INPUT_SPACE) || LpPadMng.GetPad().Buttons[0]) && bcoon_ == 0)
+		{
+			VECTOR tmpvec1 = pos_, tmpvec2 = movePos_;
+			tmpvec1.y = 0.0f;
+			tmpvec2.y = 0.0f;
+
+			pbullet_->SetBullet(VAdd(pos_, VGet(0.0f, 100.0f, 0.0f)), VNorm(VSub(tmpvec1, tmpvec2)), shotLR_,0);
+			bcoon_ = 0;
+			bcoon_++;
+		}
+		if (bcoon_ != 0)
+		{
+			if (bcoon_ == 30)
+			{
+				VECTOR tmpvec1 = pMmm_[pMcon_[1]].first, tmpvec2 = movePos_, tmpvec3 = VNorm(movePos_);
+				tmpvec1.y = 0.0f;
+				tmpvec2.y = 0.0f;
+				pbullet_->SetBullet(VAdd(pMmm_[pMcon_[1]].first, VGet(tmpvec3.x * 200, 100.0f, tmpvec3.z * 200)), VNorm(VSub(tmpvec1, tmpvec2)), shotLR_ ^ 1,1);
+			}
+			if (bcoon_ == 30 * 2)
+			{
+				bcoon_ = 0;
+				VECTOR tmpvec1 = pMmm_[pMcon_[2]].first, tmpvec2 = movePos_, tmpvec3 = VNorm(movePos_);
+				tmpvec1.y = 0.0f;
+				tmpvec2.y = 0.0f;
+				pbullet_->SetBullet(VAdd(pMmm_[pMcon_[2]].first, VGet(tmpvec3.x * 300, 100.0f, tmpvec3.z * 300)), VNorm(VSub(tmpvec1, tmpvec2)), shotLR_ ^ 1,2);
+			}
+			if (bcoon_ != 0)
+			{
+				bcoon_++;
+			}
+		}
 	}
 }
 

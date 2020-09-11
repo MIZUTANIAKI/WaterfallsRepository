@@ -11,6 +11,14 @@ enum class UNIT_ID			//それぞれの立場
 	MAX,	
 };
 
+// 移動速度
+#define MOVESPEED					10.0f
+
+// 操作軸のﾌﾟﾚｲﾔ本体とのの距離
+#define MOVE_DISTANCE		1.0f
+
+// 角度変化速度
+#define PLAYER_ANGLE_SPEED			0.2f	
 
 class Obj;
 
@@ -20,14 +28,14 @@ class Obj
 {
 public:
 	Obj();
-	~Obj();
+	virtual ~Obj();
 	virtual UNIT_ID GetUnitID(void)	//ユニットIDを返す
 	{
-		return _unitID;
+		return unitID_;
 	}
 	virtual VECTOR GetPos(void)	//位置情報を返す
 	{
-		return _pos;
+		return pos_;
 	}
 
 	virtual void Updata(void) = 0;	//OBJ系の更新用
@@ -37,9 +45,13 @@ public:
 		return;
 	}
 
-	void SetUnitID(UNIT_ID unitID) { _unitID = unitID; }
+	void SetUnitID(UNIT_ID unitID) { unitID_ = unitID; }
+	virtual	int GetSLR(void)
+	{
+		return 0;
+	}
 protected:
-	VECTOR _pos;	//座標格納
-	UNIT_ID _unitID;	//ユニットID格納
+	VECTOR pos_;	//座標格納
+	UNIT_ID unitID_;	//ユニットID格納
 };
 

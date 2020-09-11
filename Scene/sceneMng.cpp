@@ -1,108 +1,167 @@
 #include<DxLib.h>
+#include <EffekseerForDXLib.h>
 #include "sceneMng.h"
+#include "TitleScene.h"
 #include "GameScene.h"
+#include "PadMng.h"
+#include "ImgMnj.h"
+#include "objmnj.h"
+#include "SoundMnj.h"
 
 SceneMng* SceneMng::sInstance = nullptr;
 
 
 SceneMng::SceneMng() :ScreenSize{1920,1080}
 {
-}
+	SetWindowText("うぉーたーふぉーる");
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	SetUseZBuffer3D(TRUE);
+	SetWriteZBuffer3D(TRUE);
 
-SceneMng::~SceneMng()
-{
-}
-
-void SceneMng::AddDrawQue(int que)
-{
-	//描画用のQueを追加
-	_drawList.emplace_back(que);
-}
-
-void SceneMng::AddDrawQuenex(int que)
-{
-	//描画用のQueを追加
-	_drawListnex.emplace_back(que);
-}
-
-void SceneMng::AddBulletQue(BulletQueT bque)
-{
-	_BulletList.emplace_back(bque);
-}
-
-std::vector<BulletQueT> SceneMng::GetBulletList(void)
-{
-	return _BulletList;
-}
-
-void SceneMng::Draw(void)
-{
-	ClsDrawScreen();
-	//通常物をすべて描画後、ガラスなどの透けたいものを描画するといいようだ
-	//一つずつ描画
-	for (auto dQue : _drawList)
-	{
-		MV1DrawModel(dQue);
-	}
-	//すけるのを描画
-	for (auto dQue : _drawListnex)
-	{
-		MV1DrawModel(dQue);
-	}
-
-	DrawSphere3D(VGet(0.0f, 0.0f, 0.0f), 100.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);	
-
-	ScreenFlip();
-}
-
-void SceneMng::Run(void)
-{
-	if (SysInit() != true)
-	{
-		return;
-	}
-	_activeScene = std::make_unique<GameScene>();
-
-	_fcon = NULL;
-	while (ProcessMessage() == 0 && (CheckHitKey(KEY_INPUT_ESCAPE) == 0 || systemEnd == 0))
-	{
-		_BulletList.clear();
-		_drawList.clear();
-		_drawListnex.clear();
-		_activeScene = (*_activeScene).Update(std::move(_activeScene));
-		Draw();
-		_fcon++;
-
-		if (CheckHitKey(KEY_INPUT_SPACE) == 1)
-		{
-			systemEnd = true;
-		}
-	}
-}
-
-bool SceneMng::SysInit(void)
-{
 	SetGraphMode(ScreenSize.x, ScreenSize.y, 16);
-	ChangeWindowMode(true);										//画面windowﾓｰﾄﾞ
-	if (DxLib_Init() == -1)										//DXﾗｲﾌﾞﾗﾘの初期化処理
-	{
-		return false;
-	}
 	SetDrawScreen(DX_SCREEN_BACK);
-	SetCreate3DSoundFlag(false);
+	SetCreate3DSoundFlag(true);
 	SetFontSize(60);
 	SetBackgroundColor(100, 255, 255);
-	SetUseZBufferFlag(TRUE); 
+	SetUseZBufferFlag(TRUE);
 	SetCameraNearFar(100.0f, 40000.0f);
 	SetMouseDispFlag(false);	//マウスを非表示に
 	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 	SetLightAmbColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
+
+	/*  */
+
 	//ChangeLightTypeDir(VGet(0.0f, 1.0f, 0.0f));
-	LightHandle = CreateDirLightHandle(VGet(0.0f, -1.0f, 0.0f));
-	LightHandle2 = CreateDirLightHandle(VGet(0.0f, 1.0f, 0.0f));
+	lightHandle_ = CreateDirLightHandle(VGet(0.0f, -1.0f, 0.0f));
+	//lightHandle_ = CreatePointLightHandle(VGet(320.0f, 1000.0f, 600.0f), 10000.0f,0.0f,0.002f,0.0f);
+	lightHandle2_ = CreateDirLightHandle(VGet(0.0f, 1.0f, 0.0f));
+	//lightHandle3_ = CreateDirLightHandle(VGet(0.0f, -1.0f, 0.0f));
+	//lightHandle3_ = CreatePointLightHandle(VGet(0.0f, 2000.0f, 15000.0f), 2000.0f, 0.0f, 0.002f, 0.0f);
+	//lightHandle3_ = CreateSpotLightHandle(VGet(0.0f, 2000.0f, 15000.0f),VGet(0.0f, -1.0f, 0.0f),DX_PI_F / 10.0f,DX_PI_F / 14.0f,2000.0f,0.0f,0.002f,0.0f);
+	lightHandle3_ = CreatePointLightHandle(VGet(0.0f, 100000.0f, 0.0f), 200000.0f, 0.0f, 0.00002f, 0.0f);
 
 	systemEnd = false;
+	fcon_ = 0;
+	campos_ = VGet(0.0f, 0.0f, 0.0f);
+	lightC_ = 0;
+	LpPadMng;
+	lpImglMng;
+	lpobjlMng;
+	lpSudlMng;
+
+	efcS_.reset(new EffekseerCtl());
+}
+
+SceneMng::~SceneMng()
+{
+}
+//
+//void SceneMng::AddImgDrawQue(int que,Vector2 pos)
+//{
+//	//描画用のQueを追加
+//	std::pair<int, Vector2> tp = {que,pos};
+//	drawListImg_.emplace_back(tp);
+//}
+//
+//void SceneMng::AddDrawQue(int que)
+//{
+//	//描画用のQueを追加
+//	_drawList.emplace_back(que);
+//}
+//
+//void SceneMng::AddDrawQuenex(int que)
+//{
+//	//描画用のQueを追加
+//	_drawListnex.emplace_back(que);
+//}
+
+void SceneMng::AddBulletQue(BulletQueT bque)
+{
+	bulletList_.emplace_back(bque);
+}
+
+std::vector<BulletQueT> SceneMng::GetBulletList(void)
+{
+	return bulletList_;
+}
+
+void SceneMng::GameEnd(void)
+{
+	systemEnd = true;
+}
+
+void SceneMng::SetLight(int num)
+{
+	int tm = 255 - num;
+	if (tm > 255)
+	{
+		tm = 255;
+	}
+	if (tm < 0)
+	{
+		tm = 0;
+	}
+	lightC_ = tm;
+}
+
+void SceneMng::SetEffect(EffectName name, VECTOR pos)
+{
+	efcS_->SetEffect(std::move(static_cast<std::string>("test")), pos);
+}
+
+void SceneMng::Draw(void)
+{
+	DxLib::ClsDrawScreen();
+
+	DxLib::DrawRotaGraph(lpSceneMng.ScreenSize.x / 2, lpSceneMng.ScreenSize.y / 2, 1.0f, 0.0f, lpImglMng.GetGH(std::string("img/sous3.png")), true);
+
+	efcS_->Drow();
+
+	activeScene_->Draw();
+
+	DxLib::SetDrawBlendMode(DX_BLENDMODE_ALPHA, lightC_);
+
+	DxLib::DrawBox(0, 0, ScreenSize.x, ScreenSize.y, 0x000000, true);
+
+	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
+	DxLib::ScreenFlip();
+	//DrawSphere3D(VGet(0.0f, 0.0f, 0.0f), 100.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);	
+	//// カプセルの描画
+	//DrawCapsule3D(VGet(0.0f, 0.0f, 1050.0f), VGet(0.0f, 0.0f + 200, 1050.0f), 100.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 255), FALSE);
+
+}
+
+void SceneMng::Run(void)
+{
+	activeScene_ = std::make_unique<TitleScene>();
+
+	fcon_ = NULL;
+	lpSudlMng.AddBGM(std::string("sound/bgm_49.ogg"));
+	while (ProcessMessage() == 0 && systemEnd == false)
+	{
+		//SetLightDirectionHandle(lightHandle_, campos_);
+		SetLightPositionHandle(lightHandle_, campos_);
+		lpobjlMng.ReSetD();
+		lpImglMng.ResetD();
+		bulletList_.clear();
+		lpSudlMng.ResetD();
+
+		Effekseer_Sync3DSetting();
+
+		efcS_->Updata();
+
+		LpPadMng.Run();
+		activeScene_ = (*activeScene_).Update(std::move(activeScene_));
+		lpSudlMng.Run();
+		Draw();
+		fcon_++;
+	}
+}
+
+bool SceneMng::SysInit(void)
+{
 	return true;
 }
 
