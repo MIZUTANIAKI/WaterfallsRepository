@@ -7,7 +7,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInst,LPSTR lpszCmdLine, int nCmdShow)
 {
-	ChangeWindowMode(false);									//フルスクリーン
+	ChangeWindowMode(false);										//フルスクリーン
 	if (DxLib_Init() == -1)										//DXﾗｲﾌﾞﾗﾘの初期化処理
 	{
 		return false;

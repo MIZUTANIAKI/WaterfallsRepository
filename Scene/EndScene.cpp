@@ -8,12 +8,21 @@
 
 UNBS EndScene::Update(UNBS own)
 {
+	sps_.second = sps_.first;
 	if (LpPadMng.GetPad().Buttons[7])
 	{
 		return std::make_unique<MenuScene>(std::move(own));
 	}
 
 	if (CheckHitKey(KEY_INPUT_SPACE) || LpPadMng.GetPad().Buttons[0])
+	{
+		sps_.first = true;
+	}
+	else
+	{
+		sps_.first = false;
+	}
+	if (sps_.first && !sps_.second)
 	{
 		return std::make_unique<TitleScene>();
 	}
@@ -45,6 +54,7 @@ EndScene::EndScene()
 	lpImglMng.AddImg(std::string("img/end.png"), lpSceneMng.ScreenSize / 2);
 	SetFogColor(50, 50, 50);
 	cpy_ = 200;
+	sps_ = { true,true };
 }
 
 EndScene::~EndScene()

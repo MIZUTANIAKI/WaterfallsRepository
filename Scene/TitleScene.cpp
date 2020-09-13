@@ -11,6 +11,8 @@
 
 UNBS TitleScene::Update(UNBS own)
 {
+    sps_.second = sps_.first;
+   
     if (LpPadMng.GetPad().Buttons[7])
     {
         return std::make_unique<MenuScene>(std::move(own));
@@ -18,8 +20,17 @@ UNBS TitleScene::Update(UNBS own)
 
     if (CheckHitKey(KEY_INPUT_SPACE)||LpPadMng.GetPad().Buttons[0])
     {
+        sps_.first = true;
+    }
+    else
+    {
+        sps_.first = false;
+    }
+    if (sps_.first && !sps_.second)
+    {
         return std::make_unique<GameScene>();
     }
+    
     if (CheckHitKey(KEY_INPUT_ESCAPE))
     {
         return std::make_unique<EndScene>();
@@ -52,6 +63,7 @@ UNBS TitleScene::Update(UNBS own)
    //{
    //    lpSceneMng.SetEffect(EffectName::testef, VGet(500.0f, 100.0f, -250.0f));
    //}
+
     return own;
 }
 
@@ -63,6 +75,7 @@ TitleScene::TitleScene()
     lpSceneMng.SetEffect(EffectName::testef, VGet(500.0f, 100.0f, -250.0f));
 
     SetFogColor(255, 255, 50);
+    sps_ = { true,true };
 }
 
 TitleScene::~TitleScene()

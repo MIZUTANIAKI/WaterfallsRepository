@@ -24,6 +24,10 @@ Enemy::Enemy()
 	{
 		pos_ = VGet(2000.0f, 0.0f, 7000.0f);	//敵の座標初期化
 	}
+	else
+	{
+		pos_ = VGet(rand() % 10000 - 5000.0f, 0.0f, 10000.0f);
+	}
 	moveVec_ = VGet(0.0f, 0.0f, -1.0f);
 	movePos_ = VGet(0.0f, 5000.0f, 0.0f);	//操作軸の座標初期化
 	moveYAngle_ = 180.0f;	//操作軸の角度初期化
@@ -37,10 +41,12 @@ Enemy::Enemy()
 	state_ = STATE_ID::ACTIVE;
 	LorR_ = LORR::NON;
 
-	nbullet1.reset(new Bullet(UNIT_ID::PLAYER));
+	//nbullet1.reset(new Bullet(UNIT_ID::PLAYER));
 	econ_++;
-	hp_ = 30;
+	hp_ = 25;
 	drawF_ = true;
+	stayCon_ = 0;
+	escCon_ = 0;
 }
 
 Enemy::~Enemy()
@@ -50,28 +56,65 @@ Enemy::~Enemy()
 
 void Enemy::Updata(void)
 {	
-	//向きを変更	
-	lpobjlMng.ObjRotation(unitID_, -moveYAngle_, eID_);	
-	//座標設定		
-	lpobjlMng.Setobjpos(pos_, moveVec_, unitID_, eID_);
-	//描画に投げる	
-	lpobjlMng.ObjDraw(unitID_, eID_);
+	bool resetF = false;
+
+	if (state_ == STATE_ID::STAY)
+	{
+		if (stayCon_ / 10 % 2 == 0)
+		{
+			resetF = true;
+		}
+	}
+	if (!resetF)
+	{
+		//向きを変更	
+		lpobjlMng.ObjRotation(unitID_, -moveYAngle_, eID_);
+		//座標設定		
+		lpobjlMng.Setobjpos(pos_, moveVec_, unitID_, eID_);
+		//描画に投げる	
+		lpobjlMng.ObjDraw(unitID_, eID_);
+	}
+
+	resetF =false;
+
 	if (drawF_ == false)
 	{
-		pos_.y-=3;
+		pos_.y -= 3;
 		if (pos_.y < -1000)
 		{
-			hp_ = 30;
-			drawF_ = true;
-			pos_ = VGet(rand()%10000-5000.0f, 0.0f, 10000.0f);	//敵の座標初期化
-			state_ = STATE_ID::ACTIVE;
+			resetF = true;
 		}
+	}
+	if (state_ == STATE_ID::ESCAPE)
+	{
+		if (escCon_ / 60 >= 10)
+		{
+			resetF = true;
+		}
+		escCon_++;
+	}
+	if (pos_.z < -5000)
+	{
+		resetF = true;
+	}
+	if (resetF)
+	{
+		stayCon_ = 0;
+		escCon_ = 0;
+		hp_ = 25;
+		drawF_ = true;
+		pos_ = VGet(rand() % 10000 - 5000.0f, 0.0f, 10000.0f);	//敵の座標初期化
+		state_ = STATE_ID::STAY;
+
+		moveVec_ = VGet(0.0f, 0.0f, -1.0f);
+		movePos_ = VGet(0.0f, 5000.0f, 0.0f);	//操作軸の座標初期化
+		moveYAngle_ = 180.0f;	//操作軸の角度初期化
 	}
 }
 
 void Enemy::Updata(VECTOR pos)
 {
-	
+
 	//if(abs(VSub(pos_, pos).z)<3000.0f&& abs(VSub(pos_, pos).x) < 3000.0f)
 	//{
 	//	state_ = STATE_ID::ACTIVE;
@@ -82,6 +125,14 @@ void Enemy::Updata(VECTOR pos)
 	//}
 	if (state_ == STATE_ID::STAY)
 	{
+		if (stayCon_ / 60 >= 3)
+		{
+			state_ = STATE_ID::ACTIVE;
+		}
+		else
+		{
+			stayCon_++;
+		}
 	}
 	else if (state_ == STATE_ID::ACTIVE)
 	{
@@ -102,90 +153,75 @@ void Enemy::Updata(VECTOR pos)
 			}
 		}
 
-		if (!flag_)
+		if (moveVec_.z > -1.0f)
 		{
-			// １秒たっているか
-			if (GetNowCount() - oneCount_ > 1000)
+			moveVec_.z--;
+		}
+		else if (moveVec_.z < -1.0f)
+		{
+			moveVec_.z++;
+		}
+		// １秒たっているか
+		if (GetNowCount() - oneCount_ > 1000)
+		{
+			if (!flag_)
 			{
 				flagcon_--;
 				oneCount_ = GetNowCount();
-
-				if (rand() % 500 == 0)
-				{
-					state_ = STATE_ID::ESCAPE;
-				}
+			}
+			if (rand() % 100000 == 0)
+			{
+				//100000分の1の確率で、逃げ出す。
+				state_ = STATE_ID::ESCAPE;
 			}
 		}
 
 		if (lpobjlMng.ObjCollHit(pos_, unitID_))
 		{
-   			hp_--;
+			if (rand() % 50 == 0)
+			{
+				state_ = STATE_ID::ESCAPE;
+			}
+			escCon_ = 0;
+			hp_ -= rand() % 3+1;
 		}
 		if (hp_ <= 0)
 		{
-			state_ = STATE_ID::STAY;
- 			drawF_ = false;
-		}
-		if (pos_.z < -5000)
-		{
-			hp_ = 30;
-			drawF_ = true;
-			pos_ = VGet(rand() % 10000 - 5000.0f, 0.0f, 10000.0f);	//敵の座標初期化
-			state_ = STATE_ID::ACTIVE;
+			state_ = STATE_ID::BREAK;
+			drawF_ = false;
 		}
 		MoveControl();
 
-		nbullet1->Run();
+		//nbullet1->Run();
 	}
 	else if (state_ == STATE_ID::ESCAPE)
 	{
 		ppos_ = pos;
 
-		if (CheckHitKey(KEY_INPUT_F))
+		// １秒たっているか
+		if (GetNowCount() - oneCount_ > 1000)
 		{
-			if (!fKeyold_)
+			if (rand() % 100000 == 0)
 			{
-				if (!flag_)
-				{
-					flag_ = true;
-				}
-				else
-				{
-					flag_ = false;
-					flagcon_ = 10;
-				}
-			}
-		}
-
-		if (!flag_)
-		{
-			// １秒たっているか
-			if (GetNowCount() - oneCount_ > 1000)
-			{
-				flagcon_--;
-				oneCount_ = GetNowCount();
+				//100000分の1の確率で、作戦に戻る。
+				escCon_ = 0;
+				state_ = STATE_ID::ACTIVE;
 			}
 		}
 
 		if (lpobjlMng.ObjCollHit(pos_, unitID_))
 		{
-			hp_--;
+			hp_-=5;
 		}
 		if (hp_ <= 0)
 		{
-			state_ = STATE_ID::STAY;
+			state_ = STATE_ID::BREAK;
 			drawF_ = false;
 		}
-		if (pos_.z < -5000)
-		{
-			hp_ = 30;
-			drawF_ = true;
-			pos_ = VGet(rand() % 10000 - 5000.0f, 0.0f, 10000.0f);	//敵の座標初期化
-			state_ = STATE_ID::ACTIVE;
-		}
+
 		MoveControl();
 
-		nbullet1->Run();
+		//nbullet1->Run();
 	}
 }
 
@@ -279,12 +315,12 @@ void Enemy::MoveControl(void)
 
 	if (flag_)
 	{
-		moveVec_.z += 5.0f;
+		moveVec_.z += 3.0f;
 	}
 	else
 	{
 		if (flagcon_ >= 8)
-		{
+		{                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 			moveVec_.z += 4.0f;
 		}
 		else if (flagcon_ >= 6)
@@ -300,6 +336,7 @@ void Enemy::MoveControl(void)
 			moveVec_.z += 1.0f;
 		}
 	}
+
 	//lpobjlMng.ObjCollHit(pos_, &moveVec_, unitID_);
 	VECTOR tempPos1;
 	VECTOR tempPos2;

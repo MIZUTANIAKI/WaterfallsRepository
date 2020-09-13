@@ -16,5 +16,6 @@ public:
 	SCN_ID GetSCNID_(void)override;
 private:
 	float cpy_;
+	std::pair < bool, bool > sps_;
 };
 

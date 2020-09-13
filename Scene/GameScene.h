@@ -25,5 +25,8 @@ private:
 	Camera cam;											//カメラクラス格納
 	std::vector<std::pair<shardObj, UNIT_ID>> _objList;	//アライブになっている存在を管理する。
 	VECTOR ppos;										//プレイヤー座標渡し用
+
+	bool plwlF_;
+	int plwlFCon_;
 };
 

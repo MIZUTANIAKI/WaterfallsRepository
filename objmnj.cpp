@@ -167,7 +167,7 @@ Objmnj::Objmnj()
 		DxLib::MV1SetupCollInfo(playerobjsub[i], -1, 1, 1, 1);
 	}
 	phitobj = DxLib::MV1LoadModel("mv/pHIT.mv1");
-	issobj = DxLib::MV1LoadModel("mv/iss.mv1");
+	issobj = DxLib::MV1LoadModel("mv/wll.mv1");
 	DxLib::MV1SetPosition(issobj, VGet(0.0f, 0.0f, -5000.0f));
 	DxLib::MV1SetupCollInfo(phitobj, -1, 8, 8, 8);
 	ppos = VGet(0.0f, 0.0f, 0.0f);
@@ -184,16 +184,21 @@ Objmnj::Objmnj()
 	enemyobj = DxLib::MV1LoadModel("mv/vicShip.mv1");
 	ehitobj = DxLib::MV1LoadModel("mv/pHIT.mv1");
 	DxLib::MV1SetupCollInfo(ehitobj, -1, 8, 8, 8);
-
-	bulletobj = DxLib::MV1LoadModel("mv/bullets.mv1");
-	for (int i = 0; i < BULLETMAX; i++)
+	for (int i = 0; i < CPU_MAX; i++)
 	{
 		epos[i] = VGet(0.0f, 0.0f, 15000.0f);
 		evec[i] = VGet(0.0f, 0.0f, 0.0f);
 		DxLib::MV1SetPosition(enemyobj, epos[i]);
+		enemytmodel[i] = DxLib::MV1DuplicateModel(enemyobj);
+	}
+
+	bulletobj = DxLib::MV1LoadModel("mv/bltsn.mv1");
+
+	for (int i = 0; i < BULLETMAX; i++)
+	{
+
 		bullet[i] = UNIT_ID::NON;
 		bulletmodel[i] = DxLib::MV1DuplicateModel(bulletobj);
-		enemytmodel[i] = DxLib::MV1DuplicateModel(enemyobj);
 		DxLib::MV1SetupCollInfo(bulletmodel[i], -1, 1, 1, 1);
 		bpos[i] = VGet(0.0f, 0.0f, 0.0f);
 		bvec[i] = VGet(0.0f, 0.0f, 0.0f);
@@ -226,14 +231,20 @@ bool Objmnj::ObjCollHit(VECTOR pos, UNIT_ID id)
 		//MV1_COLL_RESULT_POLY_DIM HitPolyDim = MV1CollCheck_Sphere(ehitobj, -1, pos, 100.0f);
 
 		int hcon = 0;
-		for (int i = 0; i < BULLETMAX; i++)
+		for (int i = 0; i < CPU_MAX; i++)
 		{
 
 			double tf = (static_cast<double>(static_cast<double>(epos[i].x) - static_cast<double>(pos.x)) * static_cast<double>(static_cast<double>(epos[i].x) - static_cast<double>(pos.x))) + (static_cast<double>(static_cast<double>(epos[i].y) - static_cast<double>(pos.y)) * static_cast<double>(static_cast<double>(epos[i].y) - static_cast<double>(pos.y))) + (static_cast<double>(epos[i].z) - static_cast<double>(pos.z) * static_cast<double>(static_cast<double>(epos[i].z) - static_cast<double>(pos.z)));
 
 
-			double es = static_cast<double>(static_cast <double>(45) * static_cast <double>(5)), bs = static_cast<double>(static_cast <double>(36) * static_cast<double>(14));
+			double es = static_cast<double>(static_cast <double>(30) * static_cast <double>(4)), bs = static_cast<double>(static_cast <double>(30) * static_cast<double>(4));
 
+			if ((es + bs) >= sqrt(tf))
+			{
+				hcon++;
+			}
+			
+			tf = (static_cast<double>(static_cast<double>(epos[i].x+(evec->x*2)) - static_cast<double>(pos.x)) * static_cast<double>(static_cast<double>(epos[i].x + (evec->x * 2)) - static_cast<double>(pos.x))) + (static_cast<double>(static_cast<double>(epos[i].y) - static_cast<double>(pos.y)) * static_cast<double>(static_cast<double>(epos[i].y) - static_cast<double>(pos.y))) + (static_cast<double>(epos[i].z + (evec->z * 2)) - static_cast<double>(pos.z) * static_cast<double>(static_cast<double>(epos[i].z + (evec->z * 2)) - static_cast<double>(pos.z)));
 			if ((es + bs) >= sqrt(tf))
 			{
 				hcon++;
@@ -290,18 +301,21 @@ bool Objmnj::ObjCollHit(VECTOR pos, UNIT_ID id)
 		for (int i = 0; i < BULLETMAX; i++)
 		{
 
-			double tf = ((
-				
-				
-				pos.x - bpos[i].x) * (pos.x - bpos[i].x)) + ((pos.y - bpos[i].y) * (pos.y - bpos[i].y)) + ((pos.z - bpos[i].z) * (pos.z - bpos[i].z));
+			double tf = ((static_cast<double>(pos.x) - static_cast<double>(bpos[i].x)) * (static_cast<double>(pos.x) - static_cast<double>(bpos[i].x))) + ((static_cast<double>(pos.y) - static_cast<double>(bpos[i].y)) * (static_cast<double>(pos.y) - static_cast<double>(bpos[i].y))) + ((static_cast<double>(pos.z) - static_cast<double>(bpos[i].z)) * (static_cast<double>(pos.z) - static_cast<double>(bpos[i].z)));
 
-			double es = 45 * 5, bs = 36 * 13;
+			double es = static_cast<double>(80) * static_cast<double>(4), bs = static_cast<double>(36) * static_cast<double>(4);
 
 			if ((es + bs) >= sqrt(tf))
 			{
 				hcon++;
 			}
 
+			tf = ((static_cast<double>(pos.x) - static_cast<double>(bpos[i].x + (evec->x * 2))) * (static_cast<double>(pos.x) - static_cast<double>(bpos[i].x + (evec->x * 2)))) + ((static_cast<double>(pos.y) - static_cast<double>(bpos[i].y)) * (static_cast<double>(pos.y) - static_cast<double>(bpos[i].y))) + ((static_cast<double>(pos.z) - static_cast<double>(bpos[i].z + (evec->z * 2))) * (static_cast<double>(pos.z) - static_cast<double>(bpos[i].z + (evec->z * 2))));
+			
+			if ((es + bs) >= sqrt(tf))
+			{
+				hcon++;
+			}
 		}
 		if (hcon != 0)
 		{

@@ -144,7 +144,7 @@ void SceneMng::Run(void)
 	lpSudlMng.AddBGM(std::string("sound/bgm_49.ogg"));
 	while (ProcessMessage() == 0 && systemEnd == false)
 	{
-		for (int i = 0; i < 2; i++)
+		//for (int i = 0; i < 2; i++)
 		{
 			//SetLightDirectionHandle(lightHandle_, campos_);
 			SetLightPositionHandle(lightHandle_, campos_);

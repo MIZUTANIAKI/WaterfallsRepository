@@ -326,12 +326,17 @@ void Player::MoveControl(void)
 			}
 			if (bcoon_ == 30 * 2)
 			{
-				bcoon_ = 0;
 				VECTOR tmpvec1 = pMmm_[pMcon_[2]].first, tmpvec2 = movePos_, tmpvec3 = VNorm(movePos_);
 				tmpvec1.y = 0.0f;
 				tmpvec2.y = 0.0f;
 				pbullet_->SetBullet(VAdd(pMmm_[pMcon_[2]].first, VGet(tmpvec3.x * 300, 100.0f, tmpvec3.z * 300)), VNorm(VSub(tmpvec1, tmpvec2)), shotLR_ ^ 1,2);
 			}
+
+			if (bcoon_ > 30 * 2)
+			{
+				bcoon_ = 0;
+			}
+
 			if (bcoon_ != 0)
 			{
 				bcoon_++;

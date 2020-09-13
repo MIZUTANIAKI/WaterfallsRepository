@@ -1,5 +1,5 @@
 #pragma once
-#define CPU_MAX 2
+#define CPU_MAX 9
 #include "obj.h"
 #include "Bullet.h"
 
@@ -11,6 +11,7 @@
 //#define CHARA_HIT_PUSH_POWER		40.0f		// キャラクター同士で当たったときの押し出される力
 
 #define lpobjlMng Objmnj::GetInstance()
+
 
 //モデル管理マネージャ
 class Objmnj
@@ -63,22 +64,22 @@ private:
 	std::vector<int> _drawList;						//描画するものを溜めておくキュー
 	std::vector<int> _drawListnex;					//描画するものを溜めておくキュー（すける）
 
-	int		issobj;					//ﾌﾟﾚｲﾔモデル格納用
+	int		issobj;					//壁格納用
 	int		playerobj;				//ﾌﾟﾚｲﾔモデル格納用
 	int		playerobjsub[BULLETMAX];//ﾌﾟﾚｲﾔモデル格納用
 	int		phitobj;				//ﾌﾟﾚｲﾔ当たり判定モデル格納用
 	int		skyobj;					//空
 	int		enemyobj;				//敵モデル格納用
-	int		enemytmodel[BULLETMAX];				//敵モデル格納用
+	int		enemytmodel[CPU_MAX];				//敵モデル格納用
 	int		ehitobj;				//当たり判定モデル格納用
 	int		bulletobj;				//弾モデル格納用
 	int		bulletmodel[BULLETMAX];	//弾モデル格納(多数)用
 	int		mapmodel;				//海モデル格納用
 	VECTOR	pvec;					//プレイヤ移動ベクトル
-	VECTOR	evec[BULLETMAX];		//敵の移動ベクトル
+	VECTOR	evec[CPU_MAX];			//敵の移動ベクトル
 	VECTOR	bvec[BULLETMAX];		//弾の移動ベクトル
 	VECTOR	ppos;					//プレイヤー座標
-	VECTOR	epos[BULLETMAX];					//敵座標
+	VECTOR	epos[CPU_MAX];					//敵座標
 	VECTOR	bpos[BULLETMAX];		//弾座標
 
 	UNIT_ID	player;					//ﾌﾟﾚｲﾔモデル格納用

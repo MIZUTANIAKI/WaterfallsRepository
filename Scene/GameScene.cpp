@@ -36,6 +36,8 @@ GameScene::GameScene()
 		SetFogColor(100, 100, 100);
 	}
 	pHp_ = 255;
+	plwlF_ = false;
+	plwlFCon_ = 60 * 60;
 }
 
 UNBS GameScene::Update(UNBS own)
@@ -57,7 +59,7 @@ UNBS GameScene::Update(UNBS own)
 				(*data.first).Updata(ppos);	//更新処理
 				if ((*data.first).GetPos().z <= -4950)
 				{
-					pHp_ -= 5;
+					pHp_ -= 2;
 				}
 			}
 			(*data.first).Updata();	//更新処理
@@ -67,6 +69,28 @@ UNBS GameScene::Update(UNBS own)
 				ppos = (*data.first).GetPos();
 				lrSF_ = (*data.first).GetSLR() ^ 1;
 			}
+		}
+
+		if (ppos.z > 10000)
+		{
+			plwlF_ = true;
+		}
+		else if (ppos.z < -5000)
+		{
+			plwlF_ = true;
+		}
+		else if (ppos.x>10000)
+		{
+			plwlF_ = true;
+		}
+		else if (ppos.x < -10000)
+		{
+			plwlF_ = true;
+		}
+		else
+		{
+			plwlFCon_ = 60 * 60;
+			plwlF_ = false;
 		}
 
 
@@ -89,6 +113,35 @@ UNBS GameScene::Update(UNBS own)
 			lpobjlMng.Setobjpos(VAdd(tp, VGet(0.0f, cpy_ - 220, 0.0f)), VGet(0.0f, 0.0f, 0.0f), UNIT_ID::NON, 0);
 			lpImglMng.AddImg(std::string("img/lr.png"), lpSceneMng.ScreenSize / 2, lrSF_);
 		}
+
+		if (gcon_ == 20 * 60)
+		{
+			_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
+			_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
+			_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
+		}
+		if (gcon_ == 50 * 60)
+		{
+			_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
+			_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
+			_objList.emplace_back(new(Enemy), UNIT_ID::CPU);
+		}
+		if (plwlFCon_ == 0)
+		{
+			return std::make_unique<EndScene>();
+		}
+		//(ppos.z > 10000)(ppos.z < -5000) (ppos.x > 10000)(ppos.x < -10000);
+		//DrawLine3D(VGet(-10000.0f, 10.0f, 10000.0f), VGet(10000.0f, 10.0f, 10000.0f), 0xff0000);
+		//DrawLine3D(VGet(-10000.0f, 10000.0f, 10000.0f), VGet(10000.0f, 10000.0f, 10000.0f), 0xff0000);
+
+		//DrawLine3D(VGet(-10000.0f, 10.0f, 0.0f), VGet(10000.0f, 10.0f, 0.0f), 0xff0000);
+		//DrawLine3D(VGet(-10000.0f, 10000.0f, 0.0f), VGet(10000.0f, 10000.0f, 0.0f), 0xff0000);
+
+		//DrawLine3D(VGet(10000.0f, 10.0f, -10000.0f), VGet(10000.0f, 10.0f, 10000.0f), 0xff0000);
+		//DrawLine3D(VGet(0.0f, 10000.0f, -10000.0f), VGet(0.0f, 10000.0f, 10000.0f), 0xff0000);
+
+		//DrawLine3D(VGet(10000.0f, 10000.0f, -10000.0f), VGet(10000.0f, 10000.0f, 10000.0f), 0xff0000);
+		//DrawLine3D(VGet(0.0f, 10.0f, -10000.0f), VGet(0.0f, 10.0f, 10000.0f), 0xff0000);
 		gcon_++;
 	}
 	return std::move(own);
@@ -127,7 +180,15 @@ void GameScene::Draw(void)
 			c = GetColor(255 - pHp_, 0, 0);
 		}
 		DxLib::DrawBox(lpSceneMng.ScreenSize.x/2 - 299, 1, lpSceneMng.ScreenSize.x/2 - 300 + 255 -(255-pHp_)-1, 29, c, true);
-		DxLib::DrawFormatString(1000, 20, 0x000000, "%d", pHp_);
+		//DxLib::DrawFormatString(1000, 20, 0x000000, "%d", pHp_);
+
+		if (plwlF_ == true)
+		{
+			DxLib::DrawFormatString(lpSceneMng.ScreenSize.x / 2-200+2, lpSceneMng.ScreenSize.y / 2-300,0x000000, "引き返してください。\n　あと%d秒", plwlFCon_/60);
+			DxLib::DrawFormatString(lpSceneMng.ScreenSize.x / 2-200, lpSceneMng.ScreenSize.y / 2-300,0xff0000, "引き返してください。\n　あと%d秒", plwlFCon_/60);
+
+			plwlFCon_--;
+		}
 	}
 }
 
